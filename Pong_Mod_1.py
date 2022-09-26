@@ -107,6 +107,14 @@ def game_end():
     global ball_speed_x, ball_speed_y
     ball_speed_x, ball_speed_y = 0, 0
 
+def speed_mod(speed):
+    global ball_speed_x,ball_speed_y
+    if speed == 1:
+        ball_speed_x *= 1.1
+        ball_speed_y *= 1.1
+    elif speed == 2:
+        ball_speed_x /= 1.1
+        ball_speed_y /= 1.1
 
 # General Setup
 pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -163,17 +171,15 @@ while True:
                 player_speed -= 7
             if event.key == pygame.K_3:
                 paddleMod()
+            if event.key == pygame.K_1:
+                speed_mod(1)
+            if event.key == pygame.K_2:
+                speed_mod(2)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 player_speed -= 7
             if event.key == pygame.K_UP:
                 player_speed += 7
-            if event.key == pygame.K_1:
-                ball_speed_x *= 1.1
-                ball_speed_y *= 1.1
-            if event.key == pygame.K_2:
-                ball_speed_x /= 1.1
-                ball_speed_y /= 1.1
 
     ball_animation()
     player_animation()
