@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 
+# Marco Version
 
 def ball_animation():
     global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
