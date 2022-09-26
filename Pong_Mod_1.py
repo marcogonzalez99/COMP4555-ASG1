@@ -168,6 +168,12 @@ while True:
                 player_speed -= 7
             if event.key == pygame.K_UP:
                 player_speed += 7
+            if event.key == pygame.K_1:
+                ball_speed_x *= 1.1
+                ball_speed_y *= 1.1
+            if event.key == pygame.K_2:
+                ball_speed_x /= 1.1
+                ball_speed_y /= 1.1
 
     ball_animation()
     player_animation()
