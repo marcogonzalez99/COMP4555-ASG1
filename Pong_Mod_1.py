@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 
+# Marco Version
 
 def ball_animation():
     global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
@@ -97,6 +98,10 @@ def score_logic():
         screen.blit(msg, (290, 300))
         game_end()
 
+def paddleMod():
+    global player,opponent
+    player = pygame.Rect(screen_width - 20, screen_height/2 - 70,15,random.choice((25,125)))
+    opponent = pygame.Rect(10, screen_height/2 - 70,15,random.choice((25,125)))
 
 def game_end():
     global ball_speed_x, ball_speed_y
@@ -156,17 +161,13 @@ while True:
                 player_speed += 7
             if event.key == pygame.K_UP:
                 player_speed -= 7
+            if event.key == pygame.K_3:
+                paddleMod()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 player_speed -= 7
             if event.key == pygame.K_UP:
                 player_speed += 7
-            if event.key == pygame.K_1:
-                ball_speed_x *= 1.1
-                ball_speed_y *= 1.1
-            if event.key == pygame.K_2:
-                ball_speed_x /= 1.1
-                ball_speed_y /= 1.1
 
     ball_animation()
     player_animation()
