@@ -98,13 +98,13 @@ def score_logic():
         screen.blit(msg, (290, 300))
         game_end()
 
-def paddleModPlayer(): #Mod Created by Marco - Randomizes paddle size on button press
+def paddleModPlayer(): #Mod Created by Marco - Randomizes Player Paddle Size on key "3" press
     global player
-    player = pygame.Rect(screen_width - 20, screen_height/2 - 70,15,random.choice((25,125)))
+    player = pygame.Rect(screen_width - 20, screen_height/2 - 70,10,random.choice((25,125)))
     
-def paddleModOpponent():
+def paddleModOpponent(): #Mod Created by Marco - Randomizes Opponent Paddle Size on key "4" press
     global opponent
-    opponent = pygame.Rect(10, screen_height/2 - 70,15,random.choice((25,125)))
+    opponent = pygame.Rect(10, screen_height/2 - 70,10,random.choice((25,125)))
 
 def game_end():
     global ball_speed_x, ball_speed_y
