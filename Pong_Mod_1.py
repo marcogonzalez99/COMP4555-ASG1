@@ -110,6 +110,14 @@ def game_end():
     global ball_speed_x, ball_speed_y
     ball_speed_x, ball_speed_y = 0, 0
 
+def speed_mod(speed): #Mod Created by Matthew
+    global ball_speed_x,ball_speed_y
+    if speed == 1:
+        ball_speed_x *= 1.1
+        ball_speed_y *= 1.1
+    elif speed == 2:
+        ball_speed_x /= 1.1
+        ball_speed_y /= 1.1
 
 # General Setup
 pygame.mixer.pre_init(44100, -16, 2, 512)
