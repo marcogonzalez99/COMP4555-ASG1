@@ -3,3 +3,4 @@
 # Fall 2022
 
 ![My Image](group_image.jpg)
+
