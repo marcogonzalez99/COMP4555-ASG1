@@ -28,6 +28,8 @@ def ball_animation():
     if ball.colliderect(player) and ball_speed_x > 0:
         pygame.mixer.Sound.play(pong_sound)
         if abs(ball.right - player.left) < 10:
+            if redirect_on == True: 
+                redirect_mod()
             ball_speed_x *= -1
         elif abs(ball.bottom - player.top) < 10 and ball_speed_y > 0:
             ball_speed_y *= -1
@@ -86,16 +88,15 @@ def ball_start():
         ball_speed_x = 7 * random.choice((1, -1))
         score_time = None
 
-
 def score_logic():
     if (player_score == 5):
         msg = game_font.render("Player Won", False, light_grey)
-        screen.blit(msg, (290, 300))
+        screen.blit(msg, (screen_width/2 - msg.get_width()/2, 300))
         pygame.mixer.Sound.play(win_sound)
         game_end()
     if (opponent_score == 5):
         msg = game_font.render("CPU Won", False, light_grey)
-        screen.blit(msg, (290, 300))
+        screen.blit(msg, (screen_width/2 - msg.get_width()/2, 300))
         game_end()
 
 def paddleModPlayer(): #Mod Created by Marco - Randomizes Player Paddle Size on key "3" press
@@ -105,6 +106,19 @@ def paddleModPlayer(): #Mod Created by Marco - Randomizes Player Paddle Size on 
 def paddleModOpponent(): #Mod Created by Marco - Randomizes Opponent Paddle Size on key "4" press
     global opponent
     opponent = pygame.Rect(10, screen_height/2 - 70,10,random.choice((25,125)))
+
+def redirect_mod(): #Brian's Mod - allows player to control redirect of ball
+    global ball_speed_x, ball_speed_y
+
+    #If player is moving oposite direction of ball_speed_y, reverse ball_speed_y
+    if (player_speed > 0 and ball_speed_y < 0) or (player_speed < 0 and ball_speed_y > 0):
+        ball_speed_y *= -1
+
+def mod_notification():
+    #Notify player that redirect is on
+    if redirect_on: 
+        msg = game_font.render("Redirect Mode", False, light_grey)
+        screen.blit(msg, (screen_width/2 - msg.get_width()/2, 10))
 
 def game_end():
     global ball_speed_x, ball_speed_y
@@ -146,6 +160,7 @@ ball_speed_x = 7
 ball_speed_y = 7
 player_speed = 0
 opponent_speed = 7
+redirect_on = False
 
 # Text Variables
 player_score = 0
@@ -159,6 +174,7 @@ wall_sound = pygame.mixer.Sound("./Sounds/wall.ogg")
 win_sound = pygame.mixer.Sound("./Sounds/win.ogg")
 lose_sound = pygame.mixer.Sound("./Sounds/lose.ogg")
 other_score_sound = pygame.mixer.Sound("./Sounds/other_score.ogg")
+
 # Score Timer
 score_time = True
 
@@ -176,6 +192,11 @@ while True:
                 paddleModPlayer()
             if event.key == pygame.K_4:
                 paddleModOpponent()
+            if event.key == pygame.K_5: #toggle redirect mod
+                if redirect_on == True:
+                    redirect_on = False
+                else:
+                    redirect_on = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 player_speed -= 7
@@ -195,6 +216,7 @@ while True:
                                             0), (screen_width/2, screen_height))
 
     score_logic()
+    mod_notification()
 
     if score_time:
         ball_start()
