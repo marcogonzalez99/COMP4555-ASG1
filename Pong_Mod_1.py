@@ -60,18 +60,16 @@ class Ball(Block):
             collision_paddle = pygame.sprite.spritecollide(
                 self, self.paddles, False)[0].rect
             if abs(self.rect.right - collision_paddle.left) < 10 and self.speed_x > 0:
-                self.speed_x *= -1.05
+                self.speed_x *= -1
             if abs(self.rect.left - collision_paddle.right) < 10 and self.speed_x < 0:
-                self.speed_x *= -1.05
+                self.speed_x *= -1
             if abs(self.rect.top - collision_paddle.bottom) < 10 and self.speed_x < 0:
-                self.speed_y *= -1.05
+                self.speed_y *= -1
             if abs(self.rect.bottom - collision_paddle.top) < 10 and self.speed_x > 0:
-                self.speed_y *= -1.05
+                self.speed_y *= -1
 
     def reset_ball(self):
         self.active = False
-        self.speed_x = 3  # An Alternative Speed Mod
-        self.speed_y = 3  # An alternative Speed Mod
         self.speed_x *= random.choice((-1, 1))
         self.speed_y *= random.choice((-1, 1))
         self.score_time = pygame.time.get_ticks()
