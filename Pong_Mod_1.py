@@ -92,7 +92,7 @@ class Ball(Block):
         time_counter = game_font.render(
             str(countdown_number), True, accent_color)
         time_counter_rect = time_counter.get_rect(
-            center=(screen_width/2, screen_height/2 + 50))
+            center=(screen_width/2+1, screen_height/2 + 50))
         pygame.draw.rect(screen, background_color, time_counter_rect)
         screen.blit(time_counter, time_counter_rect)
 
@@ -175,8 +175,7 @@ class GameManager:
             screen.blit(msg, (305, 100))
             self.ball_group.sprite.stop_ball()
 
-
-# General Setup
+        # General Setup
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 clock = pygame.time.Clock()
@@ -190,14 +189,16 @@ pygame.display.set_caption('Pong')
 # Global Varaibles
 background_color = pygame.Color('#2F373F')
 accent_color = (0, 0, 0)
-game_font = pygame.font.Font("freesansbold.ttf", 24)
+game_font = pygame.font.Font("Pixeltype.ttf", 48)
 middle_strip = pygame.Rect(screen_width/2-2, 0, 4, screen_height)
 game_active = False
 # Sound
 pong_sound = pygame.mixer.Sound("Sounds/pong.ogg")
-score_sound = pygame.mixer.Sound('Sounds/score.ogg')
-wall_sound = pygame.mixer.Sound('Sounds/wall.ogg')
-opponent_score = pygame.mixer.Sound('Sounds/other_score.ogg')
+score_sound = pygame.mixer.Sound("Sounds/score.ogg")
+wall_sound = pygame.mixer.Sound("Sounds/wall.ogg")
+opponent_score = pygame.mixer.Sound("Sounds/other_score.ogg")
+win_sound = pygame.mixer.Sound("Sounds/win.ogg")
+lose_sound = pygame.mixer.Sound("Sounds/lose.ogg")
 
 # Game Objects
 player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 6)
@@ -250,6 +251,15 @@ while True:
 
         # Run the Game
         game_manager.run_game()
+        if game_manager.player_score == 5:
+            game_manager.player_score = 0
+            game_manager.opponent_score = 0
+            game_active = False
+        if game_manager.opponent_score == 5:
+            game_manager.player_score = 0
+            game_manager.opponent_score = 0
+            game_active = False
+
     else:
         screen.fill(background_color)
         intro_message = game_font.render(f"Welcome to", False, accent_color)
