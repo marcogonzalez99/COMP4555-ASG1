@@ -116,9 +116,9 @@ class Opponent(Block):
             self.rect.bottom = screen_height
 
     def update(self, ball_group):
-        if self.rect.top < ball_group.sprite.rect.y - 15:
+        if self.rect.top < ball_group.sprite.rect.y:
             self.rect.y += self.speed
-        if self.rect.bottom > ball_group.sprite.rect.y + 15:
+        if self.rect.bottom > ball_group.sprite.rect.y:
             self.rect.y -= self.speed
         self.constrain()
 
