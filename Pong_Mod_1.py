@@ -200,19 +200,20 @@ wall_sound = pygame.mixer.Sound('Sounds/wall.ogg')
 opponent_score = pygame.mixer.Sound('Sounds/other_score.ogg')
 
 # Game Objects
-player = Player('Paddle.png', screen_width-20, screen_height/2, 6)
-opponent = Opponent('Paddle.png', 20, screen_width/2, 6)
+player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 6)
+opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 6)
 paddle_group = pygame.sprite.Group()
 paddle_group.add(player)
 paddle_group.add(opponent)
 
-ball = Ball('ball.png', screen_width/2, screen_height/2, 5, 5, paddle_group)
+ball = Ball('Images/ball.png', screen_width/2,
+            screen_height/2, 5, 5, paddle_group)
 ball_sprite = pygame.sprite.GroupSingle()
 ball_sprite.add(ball)
 
 # Game Logo
-game_logo = pygame.image.load("pong_logo.png")
-game_logo_rect = game_logo.get_rect(center = (360,240))
+game_logo = pygame.image.load("Images/pong_logo.png")
+game_logo_rect = game_logo.get_rect(center=(360, 240))
 
 game_manager = GameManager(ball_sprite, paddle_group)
 
@@ -221,7 +222,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        if game_active:   
+        if game_active:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     player.movement -= player.speed
@@ -241,7 +242,7 @@ while True:
                 ball.reset_ball()
                 ball.restart_counter()
                 game_active = True
-        
+
     if game_active:
         # Background Stuff
         screen.fill(background_color)
@@ -254,12 +255,13 @@ while True:
         intro_message = game_font.render(f"Welcome to", False, accent_color)
         intro_message_rect = intro_message.get_rect(center=(360, 120))
         screen.blit(intro_message, intro_message_rect)
-            
-        start_message = game_font.render(f"Press Space to Start", False, accent_color)
+
+        start_message = game_font.render(
+            f"Press Space to Start", False, accent_color)
         start_message_rect = start_message.get_rect(center=(360, 360))
         screen.blit(start_message, start_message_rect)
-            
-        screen.blit(game_logo,game_logo_rect)
+
+        screen.blit(game_logo, game_logo_rect)
 
     # Rendering
     pygame.display.flip()
