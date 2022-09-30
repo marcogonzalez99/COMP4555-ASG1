@@ -11,7 +11,7 @@ class Block(pygame.sprite.Sprite):
 
     # Paddle Mod - Changes the size of the paddle depending on what key was pressed
     def paddleMod(self):
-        height = random.randint(25, 150)
+        height = random.randint(25, 200)
         self.image = pygame.transform.scale(self.image, (10, height))
         self.rect.height = height
 
@@ -89,10 +89,10 @@ class Ball(Block):
         if current_time - self.score_time >= 2100:
             self.active = True
 
-        time_counter = game_font.render(
+        time_counter = game1_font.render(
             str(countdown_number), True, accent_color)
         time_counter_rect = time_counter.get_rect(
-            center=(screen_width/2+1, screen_height/2 + 50))
+            center=(screen_width/2+1, screen_height/2 + 110))
         pygame.draw.rect(screen, background_color, time_counter_rect)
         screen.blit(time_counter, time_counter_rect)
 
@@ -153,9 +153,9 @@ class GameManager:
             self.ball_group.sprite.reset_ball()
 
     def draw_score(self):
-        player_score = game_font.render(
+        player_score = game1_font.render(
             str(self.player_score), True, accent_color)
-        opponent_score = game_font.render(
+        opponent_score = game1_font.render(
             str(self.opponent_score), True, accent_color)
 
         player_score_rect = player_score.get_rect(
@@ -175,21 +175,23 @@ class GameManager:
             screen.blit(msg, (305, 100))
             self.ball_group.sprite.stop_ball()
 
+
         # General Setup
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 clock = pygame.time.Clock()
 
 # Main Window
-screen_width = 720
-screen_height = 480
+screen_width = 1600
+screen_height = 900
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Pong')
 
 # Global Varaibles
 background_color = pygame.Color('#2F373F')
 accent_color = (0, 0, 0)
-game_font = pygame.font.Font("Pixeltype.ttf", 48)
+game_font = pygame.font.Font("Pixeltype.ttf", 124)
+game1_font = pygame.font.Font("Pixeltype.ttf", 78)
 middle_strip = pygame.Rect(screen_width/2-2, 0, 4, screen_height)
 game_active = False
 # Sound
@@ -214,7 +216,8 @@ ball_sprite.add(ball)
 
 # Game Logo
 game_logo = pygame.image.load("Images/pong_logo.png")
-game_logo_rect = game_logo.get_rect(center=(360, 240))
+game_logo_rect = game_logo.get_rect(
+    center=(screen_width/2, screen_height/2 - 50))
 
 game_manager = GameManager(ball_sprite, paddle_group)
 
@@ -263,14 +266,22 @@ while True:
     else:
         screen.fill(background_color)
         intro_message = game_font.render(f"Welcome to", False, accent_color)
-        intro_message_rect = intro_message.get_rect(center=(360, 120))
+        intro_message_rect = intro_message.get_rect(
+            center=(screen_width/2, 120))
         screen.blit(intro_message, intro_message_rect)
 
         start_message = game_font.render(
             f"Press Space to Start", False, accent_color)
-        start_message_rect = start_message.get_rect(center=(360, 360))
-        screen.blit(start_message, start_message_rect)
+        start_message_rect = start_message.get_rect(
+            center=(screen_width/2, 740))
 
+        credit_message = game1_font.render(
+            f"Paddle Mod (Keys 1 and 2)", False, accent_color)
+        credit_message_rect = credit_message.get_rect(
+            center=(screen_width/2 - 475, 875))
+
+        screen.blit(credit_message, credit_message_rect)
+        screen.blit(start_message, start_message_rect)
         screen.blit(game_logo, game_logo_rect)
 
     # Rendering
