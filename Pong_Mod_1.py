@@ -143,11 +143,11 @@ class GameManager:
         self.draw_score()
 
     def reset_ball(self):
-        if self.ball_group.sprite.rect.right >= screen_width:
+        if self.ball_group.sprite.rect.right >= screen_width and self.opponent_score < 5:
             self.opponent_score += 1
             pygame.mixer.Sound.play(opponent_score)
             self.ball_group.sprite.reset_ball()
-        if self.ball_group.sprite.rect.left <= 0:
+        if self.ball_group.sprite.rect.left <= 0 and self.player_score < 5:
             self.player_score += 1
             pygame.mixer.Sound.play(score_sound)
             self.ball_group.sprite.reset_ball()
