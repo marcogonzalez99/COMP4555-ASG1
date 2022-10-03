@@ -2,7 +2,6 @@ import pygame
 import sys
 import random
 
-
 class Block(pygame.sprite.Sprite):
     def __init__(self, path, x_pos, y_pos):
         super().__init__()
@@ -41,6 +40,7 @@ class Ball(Block):
         self.paddles = paddles
         self.active = False
         self.score_time = 0
+        self.redirect_on = False
 
     def update(self):
         if self.active:
@@ -60,6 +60,7 @@ class Ball(Block):
             collision_paddle = pygame.sprite.spritecollide(
                 self, self.paddles, False)[0].rect
             if abs(self.rect.right - collision_paddle.left) < 10 and self.speed_x > 0:
+                self.redirect_mod(self.paddles)
                 self.speed_x *= -1
             if abs(self.rect.left - collision_paddle.right) < 10 and self.speed_x < 0:
                 self.speed_x *= -1
@@ -101,6 +102,21 @@ class Ball(Block):
         self.speed_x *= 0
         self.speed_y *= 0
         self.rect.center = (screen_width/2, screen_height/2)
+
+    #Brian's Mod - allows player to control redirect of ball
+    def redirect_mod(self, player): 
+        #Only perform redirect if enabled
+        if self.redirect_on:
+            #If player is moving oposite direction of ball_speed_y, reverse ball_speed_y
+            if (player.speed > 0 and self.speed_y < 0) or (player.speed < 0 and self.speed_y > 0):
+                self.speed_y *= -1
+
+    #Toggle redirect on and off
+    def toggle_redirect_mod(self):
+        if self.redirect_on:
+            self.redirect_on = False
+        else:
+            self.redirect_on = True
 
 
 class Opponent(Block):
@@ -236,6 +252,8 @@ while True:
                     player.paddleMod()
                 if event.key == pygame.K_2:
                     opponent.paddleMod()
+                if event.key == pygame.K_3:
+                    ball.toggle_redirect_mod()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
                     player.movement += player.speed
