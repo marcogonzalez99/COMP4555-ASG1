@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 from settings import *
+from Sounds import *
 
 
 def ball_animation():
@@ -136,12 +137,12 @@ opponent_score = 0
 game_font = pygame.font.Font("freesansbold.ttf", 24)
 
 # Sound
-pong_sound = pygame.mixer.Sound("./Sounds/pong.ogg")
-score_sound = pygame.mixer.Sound("./Sounds/score.ogg")
-wall_sound = pygame.mixer.Sound("./Sounds/wall.ogg")
-win_sound = pygame.mixer.Sound("./Sounds/win.ogg")
-lose_sound = pygame.mixer.Sound("./Sounds/lose.ogg")
-other_score_sound = pygame.mixer.Sound("./Sounds/other_score.ogg")
+pong_sound = pong_sound
+score_sound = score_sound
+wall_sound = wall_sound
+win_sound = win_sound
+lose_sound = lose_sound
+other_score_sound = other_score_sound
 # Score Timer
 score_time = True
 
