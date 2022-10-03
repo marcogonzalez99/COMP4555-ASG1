@@ -1,15 +1,9 @@
 import pygame
 
-# General Setup
-pygame.mixer.pre_init(44100, -16, 2, 512)
-pygame.init()
-clock = pygame.time.Clock()
-
 # Setting up the main window
 screen_width = 720
 screen_height = 480
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Pong - Original")
 
 # Game Rectangles
 ball = pygame.Rect(screen_width/2 - 10, screen_height/2 - 10, 20, 20)

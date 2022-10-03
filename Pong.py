@@ -103,6 +103,13 @@ def game_end():
     global ball_speed_x, ball_speed_y
     ball_speed_x, ball_speed_y = 0, 0
 
+
+# General Setup
+pygame.mixer.pre_init(44100, -16, 2, 512)
+pygame.init()
+clock = pygame.time.Clock()
+pygame.display.set_caption("Pong - Original")
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
