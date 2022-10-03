@@ -40,6 +40,7 @@ class Ball(Block):
         self.paddles = paddles
         self.active = False
         self.score_time = 0
+        self.message_time = 0
         self.redirect_on = False
 
     def update(self):
@@ -47,8 +48,12 @@ class Ball(Block):
             self.rect.x += self.speed_x
             self.rect.y += self.speed_y
             self.collisions()
+            self.message_time_get()
         else:
             self.restart_counter()
+
+    def message_time_get(self):
+        return self.message_time
 
     def collisions(self):
         if self.rect.top <= 0 or self.rect.bottom >= screen_height:
@@ -74,6 +79,7 @@ class Ball(Block):
         self.speed_x *= random.choice((-1, 1))
         self.speed_y *= random.choice((-1, 1))
         self.score_time = pygame.time.get_ticks()
+        self.message_time = pygame.time.get_ticks()
         self.rect.center = (screen_width/2, screen_height/2)
 
     def restart_counter(self):
@@ -157,6 +163,7 @@ class GameManager:
         self.end_game()
         self.reset_ball()
         self.draw_score()
+        self.encouragement_message()
 
     def reset_ball(self):
         if self.ball_group.sprite.rect.right >= screen_width and self.opponent_score < 5:
@@ -180,6 +187,18 @@ class GameManager:
             midright=(screen_width/2 - 40, screen_height/2))
         screen.blit(player_score, player_score_rect)
         screen.blit(opponent_score, opponent_score_rect)
+
+    def encouragement_message(self):
+        light_grey = (200, 200, 200)
+        current_time = pygame.time.get_ticks()
+        if self.player_score > self.opponent_score and self.player_score < 5 and current_time - self.ball_group.sprite.message_time_get() < 700:
+            encouragement_text =  game_font.render(
+            f"Nice, Keep it p!", False, light_grey)
+            screen.blit(encouragement_text, (screen_width/2 - encouragement_text.get_width()/2, 100))
+        elif self.player_score < self.opponent_score and self.opponent_score < 5 and current_time - self.ball_group.sprite.message_time_get() < 700:
+            encouragement_text =  game_font.render(
+            f"Don't Give Up!", False, light_grey)
+            screen.blit(encouragement_text, (screen_width/2 - encouragement_text.get_width()/2, 100)) 
 
     def end_game(self):
         if self.player_score == 5:
@@ -220,7 +239,7 @@ lose_sound = pygame.mixer.Sound("Sounds/lose.ogg")
 
 # Game Objects
 player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 6)
-opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 6)
+opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 2)
 paddle_group = pygame.sprite.Group()
 paddle_group.add(player)
 paddle_group.add(opponent)
