@@ -50,6 +50,13 @@ def ball_animation():
             ball_speed_y *= -1
         elif abs(ball.top - barrier.bottom) < 10 and ball_speed_y < 0:
             ball_speed_y *= -1
+        if abs(ball.right - barrier.left) < 10:
+            ball_speed_x *= -1
+        elif abs(ball.bottom - barrier.top) < 10 and ball_speed_y > 0:
+            ball_speed_y *= -1
+        elif abs(ball.top - barrier.bottom) < 10 and ball_speed_y < 0:
+            ball_speed_y *= -1
+
 
 def player_animation():
     player.y += player_speed
@@ -133,6 +140,7 @@ light_grey = (200, 200, 200)
 player_color = (175, 175, 175)
 opponent_color = (200, 200, 200)
 ball_color = (255, 255, 255)
+barrier_color = (0,0,255)
 
 # Game Variabes
 ball_speed_x = 7
@@ -177,6 +185,7 @@ while True:
 
     # Visuals - In order from top to bottom
     screen.fill(background)
+    pygame.draw.rect(screen, barrier_color, barrier)
     pygame.draw.rect(screen, player_color, player)
     pygame.draw.rect(screen, opponent_color, opponent)
     pygame.draw.ellipse(screen, ball_color, ball)
