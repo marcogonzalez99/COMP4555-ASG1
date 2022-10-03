@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+from settings import *
 
 
 def ball_animation():
@@ -109,8 +110,6 @@ pygame.init()
 clock = pygame.time.Clock()
 
 # Setting up the main window
-screen_width = 720
-screen_height = 480
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pong - Original")
 
