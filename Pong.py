@@ -2,46 +2,46 @@ import pygame
 import sys
 import random
 from settings import *
+from BallAnimation import *
 
+# def ball_animation():
+#     global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
+#     ball.x += ball_speed_x
+#     ball.y += ball_speed_y
 
-def ball_animation():
-    global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
-    ball.x += ball_speed_x
-    ball.y += ball_speed_y
+#     # Ball Border
+#     if ball.top <= 0 or ball.bottom >= screen_height:
+#         pygame.mixer.Sound.play(wall_sound)
+#         ball_speed_y *= -1
 
-    # Ball Border
-    if ball.top <= 0 or ball.bottom >= screen_height:
-        pygame.mixer.Sound.play(wall_sound)
-        ball_speed_y *= -1
+#     if ball.left <= 0:  # Player Scores
+#         pygame.mixer.Sound.play(score_sound)
+#         player_score += 1
+#         score_time = pygame.time.get_ticks()
 
-    if ball.left <= 0:  # Player Scores
-        pygame.mixer.Sound.play(score_sound)
-        player_score += 1
-        score_time = pygame.time.get_ticks()
+#     if ball.right >= screen_width:  # Opponent Scores
+#         pygame.mixer.Sound.play(other_score_sound)
+#         opponent_score += 1
+#         score_time = pygame.time.get_ticks()
 
-    if ball.right >= screen_width:  # Opponent Scores
-        pygame.mixer.Sound.play(other_score_sound)
-        opponent_score += 1
-        score_time = pygame.time.get_ticks()
+#     # Collisions
+#     if ball.colliderect(player) and ball_speed_x > 0:
+#         pygame.mixer.Sound.play(pong_sound)
+#         if abs(ball.right - player.left) < 10:
+#             ball_speed_x *= -1
+#         elif abs(ball.bottom - player.top) < 10 and ball_speed_y > 0:
+#             ball_speed_y *= -1
+#         elif abs(ball.top - player.bottom) < 10 and ball_speed_y < 0:
+#             ball_speed_y *= -1
 
-    # Collisions
-    if ball.colliderect(player) and ball_speed_x > 0:
-        pygame.mixer.Sound.play(pong_sound)
-        if abs(ball.right - player.left) < 10:
-            ball_speed_x *= -1
-        elif abs(ball.bottom - player.top) < 10 and ball_speed_y > 0:
-            ball_speed_y *= -1
-        elif abs(ball.top - player.bottom) < 10 and ball_speed_y < 0:
-            ball_speed_y *= -1
-
-    if ball.colliderect(opponent) and ball_speed_x < 0:
-        pygame.mixer.Sound.play(pong_sound)
-        if abs(ball.left - opponent.right) < 10:
-            ball_speed_x *= -1
-        elif abs(ball.bottom - opponent.top) < 10 and ball_speed_y > 0:
-            ball_speed_y *= -1
-        elif abs(ball.top - opponent.bottom) < 10 and ball_speed_y < 0:
-            ball_speed_y *= -1
+#     if ball.colliderect(opponent) and ball_speed_x < 0:
+#         pygame.mixer.Sound.play(pong_sound)
+#         if abs(ball.left - opponent.right) < 10:
+#             ball_speed_x *= -1
+#         elif abs(ball.bottom - opponent.top) < 10 and ball_speed_y > 0:
+#             ball_speed_y *= -1
+#         elif abs(ball.top - opponent.bottom) < 10 and ball_speed_y < 0:
+#             ball_speed_y *= -1
 
 
 def player_animation():
@@ -102,48 +102,6 @@ def score_logic():
 def game_end():
     global ball_speed_x, ball_speed_y
     ball_speed_x, ball_speed_y = 0, 0
-
-
-# General Setup
-pygame.mixer.pre_init(44100, -16, 2, 512)
-pygame.init()
-clock = pygame.time.Clock()
-
-# Setting up the main window
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Pong - Original")
-
-# Game Rectangles
-ball = pygame.Rect(screen_width/2 - 10, screen_height/2 - 10, 20, 20)
-player = pygame.Rect(screen_width - 20, screen_height/2 - 70, 10, 100)
-opponent = pygame.Rect(10, screen_height/2 - 70, 10, 100)
-
-background = pygame.Color('#2F373F')
-light_grey = (200, 200, 200)
-player_color = (175, 175, 175)
-opponent_color = (200, 200, 200)
-ball_color = (255, 255, 255)
-
-# Game Variabes
-ball_speed_x = 7
-ball_speed_y = 7
-player_speed = 0
-opponent_speed = 7
-
-# Text Variables
-player_score = 0
-opponent_score = 0
-game_font = pygame.font.Font("freesansbold.ttf", 24)
-
-# Sound
-pong_sound = pygame.mixer.Sound("./Sounds/pong.ogg")
-score_sound = pygame.mixer.Sound("./Sounds/score.ogg")
-wall_sound = pygame.mixer.Sound("./Sounds/wall.ogg")
-win_sound = pygame.mixer.Sound("./Sounds/win.ogg")
-lose_sound = pygame.mixer.Sound("./Sounds/lose.ogg")
-other_score_sound = pygame.mixer.Sound("./Sounds/other_score.ogg")
-# Score Timer
-score_time = True
 
 while True:
     for event in pygame.event.get():
