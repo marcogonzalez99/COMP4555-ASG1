@@ -182,16 +182,16 @@ pygame.init()
 clock = pygame.time.Clock()
 
 # Main Window
-screen_width = 720
-screen_height = 480
+screen_width = 1280
+screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Pong')
 
 # Global Varaibles
 background_color = pygame.Color('#2F373F')
 accent_color = (0, 0, 0)
-game_font = pygame.font.Font("Pixeltype.ttf", 70)
-game1_font = pygame.font.Font("Pixeltype.ttf", 45)
+game_font = pygame.font.Font("Pixeltype.ttf", 100)
+game1_font = pygame.font.Font("Pixeltype.ttf", 50)
 middle_strip = pygame.Rect(screen_width/2-2, 0, 4, screen_height)
 game_active = False
 # Sound
@@ -273,7 +273,7 @@ while True:
         start_message = game_font.render(
             f"Press Space to Start", False, accent_color)
         start_message_rect = start_message.get_rect(
-            center=(screen_width/2, 740))
+            center=(screen_width/2, screen_height - 200))
 
         credit_message = game1_font.render(
             f"Paddle Mod (Keys 1 and 2)", False, accent_color)
