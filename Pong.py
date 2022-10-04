@@ -27,7 +27,7 @@ class Player(Block):
         if self.rect.bottom >= screen_height:
             self.rect.bottom = screen_height
 
-    def update(self):
+    def update(self, ball_group):
         self.rect.y += self.movement
         self.screen_constrain()
 
@@ -42,15 +42,15 @@ class Ball(Block):
         self.score_time = 0
         self.redirect_on = False
 
-    def update(self):
+    def update(self, player):
         if self.active:
             self.rect.x += self.speed_x
             self.rect.y += self.speed_y
-            self.collisions()
+            self.collisions(player)
         else:
             self.restart_counter()
 
-    def collisions(self):
+    def collisions(self, player):
         if self.rect.top <= 0 or self.rect.bottom >= screen_height:
             pygame.mixer.Sound.play(wall_sound)
             self.speed_y *= -1
@@ -60,7 +60,7 @@ class Ball(Block):
             collision_paddle = pygame.sprite.spritecollide(
                 self, self.paddles, False)[0].rect
             if abs(self.rect.right - collision_paddle.left) < 10 and self.speed_x > 0:
-                self.redirect_mod(self.paddles)
+                self.redirect_mod(player)
                 self.speed_x *= -1
             if abs(self.rect.left - collision_paddle.right) < 10 and self.speed_x < 0:
                 self.speed_x *= -1
@@ -140,25 +140,20 @@ class Opponent(Block):
 
 
 class GameManager:
-    def __init__(self, ball_group, paddle_group, player):
+    def __init__(self, ball_group, paddle_group):
         self.player_score = 0
         self.opponent_score = 0
         self.ball_group = ball_group
         self.paddle_group = paddle_group
-        self.player = player
 
-    def run_game(self):
+    def run_game(self, player):
         # Drawing the games objects
         self.paddle_group.draw(screen)
-        self.player.draw(screen)
-        self.opponent.draw(screen)
         self.ball_group.draw(screen)
 
         # Updating the game objects
         self.paddle_group.update(self.ball_group)
-        self.player.update(self.ball_group)
-        self.opponent.update(self.ball_group)
-        self.ball_group.update()
+        self.ball_group.update(player)
         self.end_game()
         self.reset_ball()
         self.draw_score()
@@ -185,6 +180,12 @@ class GameManager:
             midright=(screen_width/2 - 40, screen_height/2))
         screen.blit(player_score, player_score_rect)
         screen.blit(opponent_score, opponent_score_rect)
+
+    # display active mods
+    def display_mode(self):
+        if ball.redirect_on:
+            msg = game_font.render("Redirect Mode On", False, accent_color)
+            screen.blit(msg, (screen_width/4 - msg.get_width()/2, 20))
 
     def end_game(self):
         if self.player_score == 5:
@@ -277,7 +278,8 @@ while True:
         pygame.draw.rect(screen, accent_color, middle_strip)
 
         # Run the Game
-        game_manager.run_game()
+        game_manager.run_game(player)
+        game_manager.display_mode()
         if game_manager.player_score == 5:
             game_manager.player_score = 0
             game_manager.opponent_score = 0
