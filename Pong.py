@@ -27,7 +27,7 @@ class Player(Block):
         if self.rect.bottom >= screen_height:
             self.rect.bottom = screen_height
 
-    def update(self, ball_group):
+    def update(self):
         self.rect.y += self.movement
         self.screen_constrain()
 
@@ -140,19 +140,24 @@ class Opponent(Block):
 
 
 class GameManager:
-    def __init__(self, ball_group, paddle_group):
+    def __init__(self, ball_group, paddle_group, player):
         self.player_score = 0
         self.opponent_score = 0
         self.ball_group = ball_group
         self.paddle_group = paddle_group
+        self.player = player
 
     def run_game(self):
         # Drawing the games objects
         self.paddle_group.draw(screen)
+        self.player.draw(screen)
+        self.opponent.draw(screen)
         self.ball_group.draw(screen)
 
         # Updating the game objects
         self.paddle_group.update(self.ball_group)
+        self.player.update(self.ball_group)
+        self.opponent.update(self.ball_group)
         self.ball_group.update()
         self.end_game()
         self.reset_ball()
@@ -210,6 +215,7 @@ game_font = pygame.font.Font("Pixeltype.ttf", 100)
 game1_font = pygame.font.Font("Pixeltype.ttf", 50)
 middle_strip = pygame.Rect(screen_width/2-2, 0, 4, screen_height)
 game_active = False
+
 # Sound
 pong_sound = pygame.mixer.Sound("Sounds/pong.ogg")
 score_sound = pygame.mixer.Sound("Sounds/score.ogg")
