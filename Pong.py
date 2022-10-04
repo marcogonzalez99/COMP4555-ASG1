@@ -43,19 +43,19 @@ class Ball(Block):
         self.message_time = 0
         self.redirect_on = False
 
-    def update(self):
+    def update(self, player):
         if self.active:
             self.rect.x += self.speed_x
             self.rect.y += self.speed_y
-            self.collisions()
+            self.collisions(player)
             self.message_time_get()
         else:
             self.restart_counter()
-
+    
     def message_time_get(self):
         return self.message_time
-
-    def collisions(self):
+         
+    def collisions(self, player):
         if self.rect.top <= 0 or self.rect.bottom >= screen_height:
             pygame.mixer.Sound.play(wall_sound)
             self.speed_y *= -1
@@ -65,7 +65,7 @@ class Ball(Block):
             collision_paddle = pygame.sprite.spritecollide(
                 self, self.paddles, False)[0].rect
             if abs(self.rect.right - collision_paddle.left) < 10 and self.speed_x > 0:
-                self.redirect_mod(self.paddles)
+                self.redirect_mod(player)
                 self.speed_x *= -1
             if abs(self.rect.left - collision_paddle.right) < 10 and self.speed_x < 0:
                 self.speed_x *= -1
@@ -152,14 +152,14 @@ class GameManager:
         self.ball_group = ball_group
         self.paddle_group = paddle_group
 
-    def run_game(self):
+    def run_game(self, player):
         # Drawing the games objects
         self.paddle_group.draw(screen)
         self.ball_group.draw(screen)
 
         # Updating the game objects
         self.paddle_group.update(self.ball_group)
-        self.ball_group.update()
+        self.ball_group.update(player)
         self.end_game()
         self.reset_ball()
         self.draw_score()
@@ -187,7 +187,13 @@ class GameManager:
             midright=(screen_width/2 - 40, screen_height/2))
         screen.blit(player_score, player_score_rect)
         screen.blit(opponent_score, opponent_score_rect)
-
+        
+    # display active mods
+    def display_mode(self):
+        if ball.redirect_on:
+            msg = game_font.render("Redirect Mode On", False, accent_color)
+            screen.blit(msg, (screen_width/4 - msg.get_width()/2, 20))
+    
     def encouragement_message(self):
         light_grey = (200, 200, 200)
         current_time = pygame.time.get_ticks()
@@ -199,7 +205,7 @@ class GameManager:
             encouragement_text =  game_font.render(
             f"Don't Give Up!", False, light_grey)
             screen.blit(encouragement_text, (screen_width/2 - encouragement_text.get_width()/2, 100)) 
-
+  
     def end_game(self):
         if self.player_score == 5:
             msg = game_font.render("Player Won", False, accent_color)
@@ -229,6 +235,7 @@ game_font = pygame.font.Font("Pixeltype.ttf", 100)
 game1_font = pygame.font.Font("Pixeltype.ttf", 50)
 middle_strip = pygame.Rect(screen_width/2-2, 0, 4, screen_height)
 game_active = False
+
 # Sound
 pong_sound = pygame.mixer.Sound("Sounds/pong.ogg")
 score_sound = pygame.mixer.Sound("Sounds/score.ogg")
@@ -290,7 +297,8 @@ while True:
         pygame.draw.rect(screen, accent_color, middle_strip)
 
         # Run the Game
-        game_manager.run_game()
+        game_manager.run_game(player)
+        game_manager.display_mode()
         if game_manager.player_score == 5:
             game_manager.player_score = 0
             game_manager.opponent_score = 0
