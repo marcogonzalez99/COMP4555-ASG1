@@ -4,7 +4,7 @@ import random
 
 
 def ball_animation():
-    global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
+    global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time, barrier
     ball.x += ball_speed_x
     ball.y += ball_speed_y
 
@@ -46,16 +46,25 @@ def ball_animation():
         pygame.mixer.Sound.play(pong_sound)
         if abs(ball.left - barrier.right) < 10:
             ball_speed_x *= -1
-        elif abs(ball.bottom - barrier.top) < 10 and ball_speed_y > 0:
-            ball_speed_y *= -1
-        elif abs(ball.top - barrier.bottom) < 10 and ball_speed_y < 0:
-            ball_speed_y *= -1
-        if abs(ball.right - barrier.left) < 10:
+        elif abs(ball.right - barrier.left) < 10:
             ball_speed_x *= -1
         elif abs(ball.bottom - barrier.top) < 10 and ball_speed_y > 0:
             ball_speed_y *= -1
         elif abs(ball.top - barrier.bottom) < 10 and ball_speed_y < 0:
             ball_speed_y *= -1
+
+    if ball.colliderect(barrier) and ball_speed_x > 0:
+        pygame.mixer.Sound.play(pong_sound)
+        if abs(ball.left - barrier.right) < 10:
+            ball_speed_x *= -1
+        elif abs(ball.right - barrier.left) < 10:
+            ball_speed_x *= -1
+        elif abs(ball.bottom - barrier.top) < 10 and ball_speed_y > 0:
+            ball_speed_y *= -1
+        elif abs(ball.top - barrier.bottom) < 10 and ball_speed_y < 0:
+            ball_speed_y *= -1
+
+    
 
 
 def player_animation():
@@ -118,6 +127,15 @@ def game_end():
     ball_speed_x, ball_speed_y = 0, 0
 
 
+def despawn_barrier():
+    global barrier
+    barrier = pygame.Rect(0, 0, 0, 0)
+
+def spawn_barrier():
+    global barrier
+    barrier = pygame.Rect(random.randint(0, screen_width), random.randint(0, screen_height), random.randint(0, screen_width/2), random.randint(0, screen_height/2))
+
+
 # General Setup
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
@@ -133,7 +151,7 @@ pygame.display.set_caption("Pong - Original")
 ball = pygame.Rect(screen_width/2 - 10, screen_height/2 - 10, 20, 20)
 player = pygame.Rect(screen_width - 20, screen_height/2 - 70, 10, 100)
 opponent = pygame.Rect(10, screen_height/2 - 70, 10, 100)
-barrier = pygame.Rect(screen_width/2, screen_height/2 - 70, 10, 100)
+barrier = pygame.Rect(0, 0, 0, 0)
 
 background = pygame.Color('#2F373F')
 light_grey = (200, 200, 200)
@@ -178,6 +196,13 @@ while True:
                 player_speed -= 7
             if event.key == pygame.K_UP:
                 player_speed += 7
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_5:
+            despawn_barrier()
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_4:
+            spawn_barrier()
+
+
+
 
     ball_animation()
     player_animation()
@@ -185,9 +210,9 @@ while True:
 
     # Visuals - In order from top to bottom
     screen.fill(background)
-    pygame.draw.rect(screen, barrier_color, barrier)
     pygame.draw.rect(screen, player_color, player)
     pygame.draw.rect(screen, opponent_color, opponent)
+    pygame.draw.rect(screen, barrier_color, barrier)
     pygame.draw.ellipse(screen, ball_color, ball)
     pygame.draw.aaline(screen, light_grey, (screen_width/2,
                                             0), (screen_width/2, screen_height))
