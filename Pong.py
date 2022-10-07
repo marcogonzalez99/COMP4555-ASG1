@@ -139,9 +139,9 @@ class Opponent(Block):
             self.rect.bottom = screen_height
 
     def update(self, ball_group):
-        if self.rect.top < ball_group.sprite.rect.y - 10:
+        if self.rect.top < ball_group.sprite.rect.y - 12:
             self.rect.y += self.speed
-        if self.rect.bottom > ball_group.sprite.rect.y + 10:
+        if self.rect.bottom > ball_group.sprite.rect.y + 12:
             self.rect.y -= self.speed
         self.constrain()
 
@@ -254,7 +254,7 @@ paddle_group.add(player)
 paddle_group.add(opponent)
 
 ball = Ball('Images/ball.png', screen_width/2,
-            screen_height/2, 7, 7, paddle_group)
+            screen_height/2, 8, 8, paddle_group)
 ball_sprite = pygame.sprite.GroupSingle()
 ball_sprite.add(ball)
 
