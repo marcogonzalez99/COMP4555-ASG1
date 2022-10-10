@@ -15,9 +15,6 @@ class Block(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (10, height))
         self.rect.height = height
 
-        
-
-
 
 class Player(Block):
     def __init__(self, path, x_pos, y_pos, speed):
@@ -34,7 +31,6 @@ class Player(Block):
     def update(self, ball_group):
         self.rect.y += self.movement
         self.screen_constrain()
-
 
 
 class Ball(Block):
@@ -56,8 +52,8 @@ class Ball(Block):
             self.message_time_get()
         else:
             self.restart_counter()
-   
-    def speedMod(self, input):       
+
+    def speedMod(self, input):
         if input == 0:
             self.speed_x /= 1.1
             self.speed_y /= 1.1
@@ -231,6 +227,7 @@ class GameManager:
             screen.blit(msg, (305, 100))
             self.ball_group.sprite.stop_ball()
 
+
         # General Setup
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
@@ -259,8 +256,8 @@ win_sound = pygame.mixer.Sound("Sounds/win.ogg")
 lose_sound = pygame.mixer.Sound("Sounds/lose.ogg")
 
 # Game Objects
-player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 7)
-opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 7)
+player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 8)
+opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 8)
 paddle_group = pygame.sprite.Group()
 paddle_group.add(player)
 paddle_group.add(opponent)
@@ -288,6 +285,8 @@ while True:
                     player.movement -= player.speed
                 if event.key == pygame.K_DOWN:
                     player.movement += player.speed
+                if event.key == pygame.K_ESCAPE:
+                    game_active = False
                 if event.key == pygame.K_1:
                     player.paddleMod()
                 if event.key == pygame.K_2:
@@ -306,6 +305,8 @@ while True:
                     player.movement -= player.speed
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                game_manager.player_score = 0
+                game_manager.opponent_score = 0
                 ball.reset_ball()
                 ball.restart_counter()
                 game_active = True
@@ -342,21 +343,33 @@ while True:
         paddle_mod_message = game1_font.render(
             f"Paddle Mod (Keys 1 and 2)", False, accent_color)
         paddle_mod_message_rect = paddle_mod_message.get_rect(
-            topleft=(10, screen_height - 40))
+            topleft=(10, screen_height - 80))
 
         redirect_mod_message = game1_font.render(
             f"Redirect Mod (Key 3)", False, accent_color)
         redirect_mod_message_rect = redirect_mod_message.get_rect(
-            topleft=(10, screen_height - 80))
+            topleft=(10, screen_height - 40))
 
         encourage_mod_message = game1_font.render(
             f"Encourage Mod ", False, accent_color)
         encourage_mod_message_rect = encourage_mod_message.get_rect(
             topright=(screen_width, screen_height - 40))
 
+        wall_mod_message = game1_font.render(
+            f"Wall Mod (Keys 4 and 5)", False, accent_color)
+        wall_mod_message_rect = wall_mod_message.get_rect(
+            topright=(screen_width, screen_height - 120))
+
+        speed_mod_message = game1_font.render(
+            f"Speed Mod (Keys 6 and 7)", False, accent_color)
+        speed_mod_message_rect = speed_mod_message.get_rect(
+            topright=(screen_width, screen_height - 80))
+
         screen.blit(paddle_mod_message, paddle_mod_message_rect)
         screen.blit(redirect_mod_message, redirect_mod_message_rect)
         screen.blit(encourage_mod_message, encourage_mod_message_rect)
+        screen.blit(wall_mod_message, wall_mod_message_rect)
+        screen.blit(speed_mod_message, speed_mod_message_rect)
         screen.blit(start_message, start_message_rect)
         screen.blit(game_logo, game_logo_rect)
 
