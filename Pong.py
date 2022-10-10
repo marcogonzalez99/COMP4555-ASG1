@@ -15,6 +15,9 @@ class Block(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (10, height))
         self.rect.height = height
 
+        
+
+
 
 class Player(Block):
     def __init__(self, path, x_pos, y_pos, speed):
@@ -31,6 +34,7 @@ class Player(Block):
     def update(self, ball_group):
         self.rect.y += self.movement
         self.screen_constrain()
+
 
 
 class Ball(Block):
@@ -52,6 +56,14 @@ class Ball(Block):
             self.message_time_get()
         else:
             self.restart_counter()
+   
+    def speedMod(self, input):       
+        if input == 0:
+            self.speed_x /= 1.1
+            self.speed_y /= 1.1
+        elif input == 1:
+            self.speed_x *= 1.1
+            self.speed_y *= 1.1
 
     def message_time_get(self):
         return self.message_time
@@ -282,6 +294,10 @@ while True:
                     opponent.paddleMod()
                 if event.key == pygame.K_3:
                     ball.toggle_redirect_mod()
+
+                if event.key == pygame.K_5:
+                    ball.speedMod(0)
+                    ball.speedMod(1)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
                     player.movement += player.speed
