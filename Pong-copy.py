@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 
+
 class Block(pygame.sprite.Sprite):
     def __init__(self, path, x_pos, y_pos):
         super().__init__()
@@ -43,19 +44,27 @@ class Ball(Block):
         self.message_time = 0
         self.redirect_on = False
 
-    def update(self):
+    def update(self, player):
         if self.active:
             self.rect.x += self.speed_x
             self.rect.y += self.speed_y
-            self.collisions()
+            self.collisions(player)
             self.message_time_get()
         else:
             self.restart_counter()
 
+    def speedMod(self, input):
+        if input == 0:
+            self.speed_x /= 1.1
+            self.speed_y /= 1.1
+        elif input == 1:
+            self.speed_x *= 1.1
+            self.speed_y *= 1.1
+
     def message_time_get(self):
         return self.message_time
 
-    def collisions(self):
+    def collisions(self, player):
         if self.rect.top <= 0 or self.rect.bottom >= screen_height:
             pygame.mixer.Sound.play(wall_sound)
             self.speed_y *= -1
@@ -65,7 +74,7 @@ class Ball(Block):
             collision_paddle = pygame.sprite.spritecollide(
                 self, self.paddles, False)[0].rect
             if abs(self.rect.right - collision_paddle.left) < 10 and self.speed_x > 0:
-                self.redirect_mod(self.paddles)
+                self.redirect_mod(player)
                 self.speed_x *= -1
             if abs(self.rect.left - collision_paddle.right) < 10 and self.speed_x < 0:
                 self.speed_x *= -1
@@ -109,15 +118,15 @@ class Ball(Block):
         self.speed_y *= 0
         self.rect.center = (screen_width/2, screen_height/2)
 
-    #Brian's Mod - allows player to control redirect of ball
-    def redirect_mod(self, player): 
-        #Only perform redirect if enabled
+    # Brian's Mod - allows player to control redirect of ball
+    def redirect_mod(self, player):
+        # Only perform redirect if enabled
         if self.redirect_on:
-            #If player is moving oposite direction of ball_speed_y, reverse ball_speed_y
+            # If player is moving oposite direction of ball_speed_y, reverse ball_speed_y
             if (player.speed > 0 and self.speed_y < 0) or (player.speed < 0 and self.speed_y > 0):
                 self.speed_y *= -1
 
-    #Toggle redirect on and off
+    # Toggle redirect on and off
     def toggle_redirect_mod(self):
         if self.redirect_on:
             self.redirect_on = False
@@ -138,9 +147,9 @@ class Opponent(Block):
             self.rect.bottom = screen_height
 
     def update(self, ball_group):
-        if self.rect.top < ball_group.sprite.rect.y - 10:
+        if self.rect.top < ball_group.sprite.rect.y - 12:
             self.rect.y += self.speed
-        if self.rect.bottom > ball_group.sprite.rect.y + 10:
+        if self.rect.bottom > ball_group.sprite.rect.y + 12:
             self.rect.y -= self.speed
         self.constrain()
 
@@ -152,14 +161,14 @@ class GameManager:
         self.ball_group = ball_group
         self.paddle_group = paddle_group
 
-    def run_game(self):
+    def run_game(self, player):
         # Drawing the games objects
         self.paddle_group.draw(screen)
         self.ball_group.draw(screen)
 
         # Updating the game objects
         self.paddle_group.update(self.ball_group)
-        self.ball_group.update()
+        self.ball_group.update(player)
         self.end_game()
         self.reset_ball()
         self.draw_score()
@@ -182,23 +191,31 @@ class GameManager:
             str(self.opponent_score), True, accent_color)
 
         player_score_rect = player_score.get_rect(
-            midleft=(screen_width/2 + 40, screen_height/2))
+            midleft=(screen_width/2 + 20, screen_height/2))
         opponent_score_rect = opponent_score.get_rect(
-            midright=(screen_width/2 - 40, screen_height/2))
+            midright=(screen_width/2 - 20, screen_height/2))
         screen.blit(player_score, player_score_rect)
         screen.blit(opponent_score, opponent_score_rect)
+
+    # display active mods
+    def display_mode(self):
+        if ball.redirect_on:
+            msg = game_font.render("Redirect Mode On", False, accent_color)
+            screen.blit(msg, (screen_width/4 - msg.get_width()/2, 20))
 
     def encouragement_message(self):
         light_grey = (200, 200, 200)
         current_time = pygame.time.get_ticks()
         if self.player_score > self.opponent_score and self.player_score < 5 and current_time - self.ball_group.sprite.message_time_get() < 700:
-            encouragement_text =  game_font.render(
-            f"Nice, Keep it p!", False, light_grey)
-            screen.blit(encouragement_text, (screen_width/2 - encouragement_text.get_width()/2, 100))
+            encouragement_text = game_font.render(
+                f"Nice, Keep it p!", False, light_grey)
+            screen.blit(encouragement_text, (screen_width/2 -
+                        encouragement_text.get_width()/2, 100))
         elif self.player_score < self.opponent_score and self.opponent_score < 5 and current_time - self.ball_group.sprite.message_time_get() < 700:
-            encouragement_text =  game_font.render(
-            f"Don't Give Up!", False, light_grey)
-            screen.blit(encouragement_text, (screen_width/2 - encouragement_text.get_width()/2, 100)) 
+            encouragement_text = game_font.render(
+                f"Don't Give Up!", False, light_grey)
+            screen.blit(encouragement_text, (screen_width/2 -
+                        encouragement_text.get_width()/2, 100))
 
     def end_game(self):
         if self.player_score == 5:
@@ -229,6 +246,7 @@ game_font = pygame.font.Font("Pixeltype.ttf", 100)
 game1_font = pygame.font.Font("Pixeltype.ttf", 50)
 middle_strip = pygame.Rect(screen_width/2-2, 0, 4, screen_height)
 game_active = False
+
 # Sound
 pong_sound = pygame.mixer.Sound("Sounds/pong.ogg")
 score_sound = pygame.mixer.Sound("Sounds/score.ogg")
@@ -238,14 +256,14 @@ win_sound = pygame.mixer.Sound("Sounds/win.ogg")
 lose_sound = pygame.mixer.Sound("Sounds/lose.ogg")
 
 # Game Objects
-player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 6)
-opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 2)
+player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 8)
+opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 8)
 paddle_group = pygame.sprite.Group()
 paddle_group.add(player)
 paddle_group.add(opponent)
 
 ball = Ball('Images/ball.png', screen_width/2,
-            screen_height/2, 5, 5, paddle_group)
+            screen_height/2, 8, 8, paddle_group)
 ball_sprite = pygame.sprite.GroupSingle()
 ball_sprite.add(ball)
 
@@ -267,12 +285,19 @@ while True:
                     player.movement -= player.speed
                 if event.key == pygame.K_DOWN:
                     player.movement += player.speed
+                if event.key == pygame.K_ESCAPE:
+                    game_active = False
                 if event.key == pygame.K_1:
                     player.paddleMod()
                 if event.key == pygame.K_2:
                     opponent.paddleMod()
                 if event.key == pygame.K_3:
                     ball.toggle_redirect_mod()
+
+                if event.key == pygame.K_6:
+                    ball.speedMod(0)
+                elif event.key == pygame.K_7:
+                    ball.speedMod(1)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
                     player.movement += player.speed
@@ -280,6 +305,8 @@ while True:
                     player.movement -= player.speed
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                game_manager.player_score = 0
+                game_manager.opponent_score = 0
                 ball.reset_ball()
                 ball.restart_counter()
                 game_active = True
@@ -290,7 +317,8 @@ while True:
         pygame.draw.rect(screen, accent_color, middle_strip)
 
         # Run the Game
-        game_manager.run_game()
+        game_manager.run_game(player)
+        game_manager.display_mode()
         if game_manager.player_score == 5:
             game_manager.player_score = 0
             game_manager.opponent_score = 0
@@ -312,12 +340,36 @@ while True:
         start_message_rect = start_message.get_rect(
             center=(screen_width/2, screen_height - 200))
 
-        credit_message = game1_font.render(
+        paddle_mod_message = game1_font.render(
             f"Paddle Mod (Keys 1 and 2)", False, accent_color)
-        credit_message_rect = credit_message.get_rect(
+        paddle_mod_message_rect = paddle_mod_message.get_rect(
+            topleft=(10, screen_height - 80))
+
+        redirect_mod_message = game1_font.render(
+            f"Redirect Mod (Key 3)", False, accent_color)
+        redirect_mod_message_rect = redirect_mod_message.get_rect(
             topleft=(10, screen_height - 40))
 
-        screen.blit(credit_message, credit_message_rect)
+        encourage_mod_message = game1_font.render(
+            f"Encourage Mod ", False, accent_color)
+        encourage_mod_message_rect = encourage_mod_message.get_rect(
+            topright=(screen_width, screen_height - 40))
+
+        wall_mod_message = game1_font.render(
+            f"Wall Mod (Keys 4 and 5)", False, accent_color)
+        wall_mod_message_rect = wall_mod_message.get_rect(
+            topright=(screen_width, screen_height - 120))
+
+        speed_mod_message = game1_font.render(
+            f"Speed Mod (Keys 6 and 7)", False, accent_color)
+        speed_mod_message_rect = speed_mod_message.get_rect(
+            topright=(screen_width, screen_height - 80))
+
+        screen.blit(paddle_mod_message, paddle_mod_message_rect)
+        screen.blit(redirect_mod_message, redirect_mod_message_rect)
+        screen.blit(encourage_mod_message, encourage_mod_message_rect)
+        screen.blit(wall_mod_message, wall_mod_message_rect)
+        screen.blit(speed_mod_message, speed_mod_message_rect)
         screen.blit(start_message, start_message_rect)
         screen.blit(game_logo, game_logo_rect)
 
