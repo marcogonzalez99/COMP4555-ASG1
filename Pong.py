@@ -295,8 +295,9 @@ while True:
                 if event.key == pygame.K_3:
                     ball.toggle_redirect_mod()
 
-                if event.key == pygame.K_5:
+                if event.key == pygame.K_6:
                     ball.speedMod(0)
+                elif event.key == pygame.K_7:
                     ball.speedMod(1)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
