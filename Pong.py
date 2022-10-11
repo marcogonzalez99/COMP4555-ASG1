@@ -1,3 +1,5 @@
+from re import A
+from tkinter import Y
 import pygame
 import sys
 import random
@@ -154,6 +156,11 @@ class Opponent(Block):
         self.constrain()
 
 
+class Barrier(Block):
+    def __init__(self, path, x_pos, y_pos):
+        super().__init__(path, x_pos, y_pos)
+        
+
 class GameManager:
     def __init__(self, ball_group, paddle_group):
         self.player_score = 0
@@ -227,8 +234,14 @@ class GameManager:
             screen.blit(msg, (305, 100))
             self.ball_group.sprite.stop_ball()
 
+    def despawnBarrier(self):
+        paddle_group.remove(barrier)
 
-        # General Setup
+    def spawnBarrier(self):
+        paddle_group.add(barrier)
+
+
+# General Setup
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 clock = pygame.time.Clock()
@@ -258,6 +271,7 @@ lose_sound = pygame.mixer.Sound("Sounds/lose.ogg")
 # Game Objects
 player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 8)
 opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 8)
+barrier = Barrier('Images/Paddle.png', random.randint(20, screen_width-20), random.randint(0, screen_height))
 paddle_group = pygame.sprite.Group()
 paddle_group.add(player)
 paddle_group.add(opponent)
@@ -293,7 +307,10 @@ while True:
                     opponent.paddleMod()
                 if event.key == pygame.K_3:
                     ball.toggle_redirect_mod()
-
+                if event.key == pygame.K_4:
+                    game_manager.despawnBarrier()
+                if event.key == pygame.K_5:
+                    game_manager.spawnBarrier()
                 if event.key == pygame.K_6:
                     ball.speedMod(0)
                 elif event.key == pygame.K_7:
