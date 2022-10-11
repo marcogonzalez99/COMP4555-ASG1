@@ -234,6 +234,7 @@ class GameManager:
             screen.blit(msg, (305, 100))
             self.ball_group.sprite.stop_ball()
 
+    # Wall mods - places a barrier in a randomly generated location for the session
     def despawnBarrier(self):
         paddle_group.remove(barrier)
 
