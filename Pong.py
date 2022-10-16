@@ -209,7 +209,7 @@ class GameManager:
         if ball.redirect_on:
             msg = game_font.render("Redirect Mode On", False, accent_color)
             screen.blit(msg, (screen_width/4 - msg.get_width()/2, 20))
-
+    # Latonia's Mod - encouragement message at start of each round
     def encouragement_message(self):
         light_grey = (200, 200, 200)
         current_time = pygame.time.get_ticks()
