@@ -309,9 +309,9 @@ while True:
                 if event.key == pygame.K_3:
                     ball.toggle_redirect_mod()
                 if event.key == pygame.K_4:
-                    game_manager.despawnBarrier()
-                if event.key == pygame.K_5:
                     game_manager.spawnBarrier()
+                if event.key == pygame.K_5:
+                    game_manager.despawnBarrier()
                 if event.key == pygame.K_6:
                     ball.speedMod(0)
                 elif event.key == pygame.K_7:
