@@ -270,15 +270,15 @@ win_sound = pygame.mixer.Sound("Sounds/win.ogg")
 lose_sound = pygame.mixer.Sound("Sounds/lose.ogg")
 
 # Game Objects
-player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 8)
-opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 8)
+player = Player('Images/Paddle.png', screen_width-20, screen_height/2, 7)
+opponent = Opponent('Images/Paddle.png', 20, screen_width/2, 7)
 barrier = Barrier('Images/Paddle.png', random.randint(20, screen_width-20), random.randint(0, screen_height))
 paddle_group = pygame.sprite.Group()
 paddle_group.add(player)
 paddle_group.add(opponent)
 
 ball = Ball('Images/ball.png', screen_width/2,
-            screen_height/2, 8, 8, paddle_group)
+            screen_height/2, 7, 7, paddle_group)
 ball_sprite = pygame.sprite.GroupSingle()
 ball_sprite.add(ball)
 
