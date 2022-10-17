@@ -56,6 +56,8 @@ class Ball(Block):
             self.restart_counter()
 
     def speedMod(self, input):
+        original_speed_x = self.speed_x
+        original_speed_y = self.speed_y
         if input == 0:
             self.speed_x /= 1.1
             self.speed_y /= 1.1
@@ -63,6 +65,9 @@ class Ball(Block):
             self.speed_x *= 1.1
             self.speed_y *= 1.1
 
+        if self.speed_x < 0.2 or self.speed_x > 3:
+            self.speed_x = original_speed_x
+            self.speed_y = original_speed_y
     def message_time_get(self):
         return self.message_time
 
