@@ -64,10 +64,6 @@ class Ball(Block):
         elif input == 1:
             self.speed_x *= 1.1
             self.speed_y *= 1.1
-
-        if self.speed_x < 0.2 or self.speed_x > 3:
-            self.speed_x = original_speed_x
-            self.speed_y = original_speed_y
     def message_time_get(self):
         return self.message_time
 
