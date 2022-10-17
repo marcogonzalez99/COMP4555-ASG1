@@ -24,5 +24,5 @@
 
 
 # Installation:
-# The files for the game itself once downloaded will be contained within a zip folder, ensure the extraction of all files and folders have been completed and within the same location. To run the game, python and the library gygame is required. The game can easily be run through a terminal, calling uplon the main file Pong.py.  
+# The files for the game itself once downloaded will be contained within a zip folder, ensure the extraction of all files and folders have been completed and within the same location. To run the game, python and the library pygame is required. The game can easily be run through a terminal, calling uplon the main file Pong.py.  
 
