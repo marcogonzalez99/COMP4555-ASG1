@@ -31,7 +31,7 @@ class Game:
         self.obstacle_x_positions = [
             num * (screen_width/self.obstacle_amount)for num in range(self.obstacle_amount)]
         self.create_multiple_objects(
-            *self.obstacle_x_positions, x_start=screen_width/15, y_start=480)
+            *self.obstacle_x_positions, x_start=screen_width/15, y_start=560)
 
         # Alien Setup
         self.aliens = pygame.sprite.Group()
@@ -84,11 +84,11 @@ class Game:
         all_aliens = self.aliens.sprites()
         for alien in all_aliens:
             if alien.rect.right >= screen_width:
-                self.alien_direction = -3
-                self.alien_move_down(2)
+                self.alien_direction = -2
+                self.alien_move_down(1)
             elif alien.rect.left <= 0:
-                self.alien_direction = 3
-                self.alien_move_down(2)
+                self.alien_direction = 2
+                self.alien_move_down(1)
 
     def alien_move_down(self, distance):
         if self.aliens:
@@ -213,30 +213,105 @@ class CRT:
         screen.blit(self.tv, (0, 0))
 
 
-if __name__ == '__main__':
-    # General Setup
-    pygame.init()
-    clock = pygame.time.Clock()
+class GameState():
+    def __init__(self):
+        self.state = "intro"
 
-    # Game Screen
-    screen_width = 600
-    screen_height = 600
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("Space Invaders")
-    game = Game()
-    crt = CRT()
-    ALIENLASER = pygame.USEREVENT + 1
-    pygame.time.set_timer(ALIENLASER, 1200)
+    def intro(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.state = "main_game"
 
-    while True:
+        # Intro text
+        intro_message = game_font.render(
+            "Click to Start", False, 'white')
+        intro_rect = intro_message.get_rect(
+            center=(screen_width/2, screen_height/2 + 150))
+
+        screen.fill((30, 30, 30))
+        screen.blit(intro_message, intro_rect)
+        screen.blit(game_logo, game_logo_rect)
+
+        crt.draw()
+        pygame.display.flip()
+
+    def main_game(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == ALIENLASER:
                 game.alien_shoot()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.state = "outro"
+
         screen.fill((30, 30, 30))
         game.run()
         crt.draw()
         pygame.display.flip()
+
+    def outro(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                game.alien_setup(rows=6, cols=8)
+                self.state = "intro"
+
+        # Outro text
+        outro_message = game_font.render(
+            "Game Over", False, 'white')
+        outro_rect = outro_message.get_rect(
+            center=(screen_width/2, screen_height/2 + 50))
+
+        outro_message_1 = game_font.render(
+            "Click To Try Again", False, 'white')
+        outro_rect_1 = outro_message_1.get_rect(
+            center=(screen_width/2, screen_height/2 + 100))
+
+        screen.fill((30, 30, 30))
+        screen.blit(outro_message, outro_rect)
+        screen.blit(outro_message_1, outro_rect_1)
+        crt.draw()
+        pygame.display.flip()
+
+    def state_manager(self):
+        if self.state == "intro":
+            self.intro()
+        if self.state == "main_game":
+            self.main_game()
+        if self.state == "outro":
+            self.outro()
+
+
+if __name__ == '__main__':
+    # General Setup
+    pygame.init()
+    clock = pygame.time.Clock()
+    game_state = GameState()
+
+    # Game Screen
+    screen_width = 700
+    screen_height = 700
+    screen = pygame.display.set_mode((screen_width, screen_height))
+    pygame.display.set_caption("Space Invaders")
+
+    # Images
+    game_logo = pygame.image.load('Images/game_logo.png')
+    game_logo_rect = game_logo.get_rect(
+        center=(screen_width/2, screen_height/2 - 100))
+
+    # Font
+    game_font = pygame.font.Font('Pixeltype.ttf', 40)
+    game = Game()
+    crt = CRT()
+    ALIENLASER = pygame.USEREVENT + 1
+    pygame.time.set_timer(ALIENLASER, 1200)
+
+    while True:
+        game_state.state_manager()
         clock.tick(75)
