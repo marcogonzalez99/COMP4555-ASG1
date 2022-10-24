@@ -227,17 +227,17 @@ class Game:
                 victory_rect = victory_surface.get_rect(
                     center=(screen_width/2, screen_height/2))
                 screen.blit(victory_surface, victory_rect)
-            elif 275 < self.win_timer < 325:
+            elif 275 < self.win_timer < 350:
                 victory_surface = self.font.render('2', False, 'white')
                 victory_rect = victory_surface.get_rect(
                     center=(screen_width/2, screen_height/2))
                 screen.blit(victory_surface, victory_rect)
-            elif 325 < self.win_timer < 400:
+            elif 350 < self.win_timer < 425:
                 victory_surface = self.font.render('1', False, 'white')
                 victory_rect = victory_surface.get_rect(
                     center=(screen_width/2, screen_height/2))
                 screen.blit(victory_surface, victory_rect)
-            if self.win_timer > 400:
+            if self.win_timer > 425:
                 self.level_won = False
                 self.next_round()
                 
