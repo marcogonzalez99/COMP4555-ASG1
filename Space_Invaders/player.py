@@ -3,15 +3,20 @@ from laser import Laser
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, constraint, speed):
+    def __init__(self, pos, constraint, speed, level):
         super().__init__()
-        self.image = pygame.image.load("Images/player.png")
+        self.level = level
+        # To change the design of the ship
+        if self.level == 1:
+            self.image = pygame.image.load("Images/player_1.png").convert_alpha()
+        else:
+            self.image = pygame.image.load("Images/player.png").convert_alpha()
         self.rect = self.image.get_rect(midbottom=pos)
         self.speed = speed
         self.max_x = constraint
         self.ready = True
         self.laser_time = 0
-        self.laser_cooldown = 50
+        self.laser_cooldown = 500
 
         self.lasers = pygame.sprite.Group()
         self.laser_sound = pygame.mixer.Sound('Sounds/audio_laser.wav')

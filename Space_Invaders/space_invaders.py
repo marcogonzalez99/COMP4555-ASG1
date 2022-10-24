@@ -12,9 +12,9 @@ class Game:
         # Setting the state of the game to start at level 1
         self.state = "level_1"
         # Player Setup
-        player_sprite = Player(
-            (screen_width/2, screen_height), screen_width, 5)
-        self.player = pygame.sprite.GroupSingle(player_sprite)
+        self.player_sprite = Player(
+            (screen_width/2, screen_height), screen_width, 5,1)
+        self.player = pygame.sprite.GroupSingle(self.player_sprite)
 
         # Health and Score setup
         self.lives = 3
@@ -38,7 +38,7 @@ class Game:
         # Alien Setup
         self.aliens = pygame.sprite.Group()
         # Create the level 1 layout for the game
-        self.alien_setup(rows=3, cols=6)
+        self.alien_setup(rows=6, cols=6)
         self.alien_direction = 1
         self.alien_lasers = pygame.sprite.Group()
 
@@ -82,15 +82,10 @@ class Game:
                 
                 # Alien Layout for level 1
                 if self.state == "level_1":
-                    alien_sprite = Alien('red', x, y)
+                    alien_sprite = Alien('red', x, y,1)
                     self.aliens.add(alien_sprite)
                 else:
-                    if row_index == 0:
-                        alien_sprite = Alien('yellow', x, y)
-                    elif 1 <= row_index <= 3:
-                        alien_sprite = Alien('green', x, y)
-                    else:
-                        alien_sprite = Alien('red', x, y)
+                    alien_sprite = Alien('green', x, y)
                     self.aliens.add(alien_sprite)
 
     def alien_position_checker(self):
@@ -183,9 +178,16 @@ class Game:
             self.level_won = False
     
     def next_round(self):
+        # This function manages the state of the round, allows us to access state and alter it easily
         if self.state == "level_1":
             game_state.state = "level_2"
             self.state = "level_2"
+            # Managing the player sprite
+            self.player.remove(self.player_sprite)
+            level_2_sprite = Player(
+                (screen_width/2, screen_height), screen_width, 5,2)
+            self.player = pygame.sprite.GroupSingle(level_2_sprite)
+            ##################################
             self.alien_setup(rows=7, cols=9)
             self.win_timer = 0
         elif self.state == "level_2":
@@ -249,7 +251,7 @@ class Game:
         self.alien_lasers.update()
 
         self.aliens.update(self.alien_direction)
-        self.alien_position_checker()
+        self.alien_position_checker() #Work on this to change the game speed
         self.extra_alien_timer()
         self.collision_checks()
         self.win_check()
