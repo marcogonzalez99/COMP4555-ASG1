@@ -1,14 +1,20 @@
 import pygame
 import math
 import random
-import psutil
-
+import json
+# import psutil
 
 pygame.init()
 
 # Game Screen
 screen = pygame.display.set_mode((800, 600)) 
 pygame.display.set_caption("Space Invaders")
+
+# json
+f = open('config.json')
+data = json.load(f)
+level_1 = data["game_details"][0]
+
 
 # Background
 background = pygame.image.load("./media/stars.png")
@@ -25,7 +31,7 @@ enemyX = []
 enemyY = []
 enemyX_change = []
 enemyY_change = []
-num_enemies = 6 #define how many enemies
+num_enemies = level_1["num_enemies"] #define how many enemies
 
 for i in range(num_enemies): #loop to create 6 enemies
 	enemyImg.append(pygame.image.load("./media/ufo.png"))
@@ -39,7 +45,7 @@ bulletImg = pygame.image.load("./media/bullet.png")
 bulletX = 0 
 bulletY = 480 
 bulletX_change = 0 
-bulletY_change = 10 
+bulletY_change = level_1["bulletY_change"]
 bullet_state = "ready" 
 
 score = 0
@@ -122,8 +128,8 @@ while running:
 			enemyY[i] = random.randint(50, 150) 
 
 			print(f"{score}")
-			print('RAM memory % used:', psutil.virtual_memory()[2])
-			print('RAM Used (GB):', psutil.virtual_memory()[3]/1000000000)
+			# print('RAM memory % used:', psutil.virtual_memory()[2])
+			# print('RAM Used (GB):', psutil.virtual_memory()[3]/1000000000)
 		
 		enemy(enemyX[i], enemyY[i], i) #animate each enemy
 
