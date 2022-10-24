@@ -223,7 +223,7 @@ class GameState():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.state = "main_game"
+                self.state = "level_1" # switch states
 
         # Intro text
         intro_message = game_font.render(
@@ -238,7 +238,7 @@ class GameState():
         crt.draw()
         pygame.display.flip()
 
-    def main_game(self):
+    def level_1(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -246,46 +246,148 @@ class GameState():
             if event.type == ALIENLASER:
                 game.alien_shoot()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.state = "outro"
+                self.state = "level_2"
+                
+        # Level text
+        level_message = game_font.render(
+            "Level 1", False, 'white')
+        level_rect = level_message.get_rect(
+            center=(screen_width/2, 25))
 
         screen.fill((30, 30, 30))
+        screen.blit(level_message, level_rect)
         game.run()
         crt.draw()
         pygame.display.flip()
-
-    def outro(self):
+    
+    def level_2(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == ALIENLASER:
+                game.alien_shoot()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                game.alien_setup(rows=6, cols=8)
-                self.state = "intro"
+                self.state = "level_3"
 
-        # Outro text
-        outro_message = game_font.render(
-            "Game Over", False, 'white')
-        outro_rect = outro_message.get_rect(
-            center=(screen_width/2, screen_height/2 + 50))
-
-        outro_message_1 = game_font.render(
-            "Click To Try Again", False, 'white')
-        outro_rect_1 = outro_message_1.get_rect(
-            center=(screen_width/2, screen_height/2 + 100))
+        # Level text
+        level_message = game_font.render(
+            "Level 2", False, 'white')
+        level_rect = level_message.get_rect(
+            center=(screen_width/2, 25))
 
         screen.fill((30, 30, 30))
-        screen.blit(outro_message, outro_rect)
-        screen.blit(outro_message_1, outro_rect_1)
+        screen.blit(level_message, level_rect)
+        game.run()
+        crt.draw()
+        pygame.display.flip()
+        
+    def level_3(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == ALIENLASER:
+                game.alien_shoot()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.state = "level_4"
+
+        # Level Text
+        # Level text
+        level_message = game_font.render(
+            "Level 3", False, 'white')
+        level_rect = level_message.get_rect(
+            center=(screen_width/2, 25))
+
+        screen.fill((30, 30, 30))
+        screen.blit(level_message, level_rect)
+        game.run()
+        crt.draw()
+        pygame.display.flip()
+        
+    def level_4(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == ALIENLASER:
+                game.alien_shoot()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.state = "level_5"
+
+        # Level text
+        level_message = game_font.render(
+            "Level 4", False, 'white')
+        level_rect = level_message.get_rect(
+            center=(screen_width/2, 25))
+
+        screen.fill((30, 30, 30))
+        screen.blit(level_message, level_rect)
+        game.run()
+        crt.draw()
+        pygame.display.flip()
+        
+    def level_5(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == ALIENLASER:
+                game.alien_shoot()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.state = "game_over"
+
+        # Level text
+        level_message = game_font.render(
+            "Level 5", False, 'white')
+        level_rect = level_message.get_rect(
+            center=(screen_width/2, 25))
+
+        screen.fill((30, 30, 30))
+        screen.blit(level_message, level_rect)
+        game.run()
+        crt.draw()
+        pygame.display.flip()
+
+    def game_over(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        # Outro text
+        game_over_message = game_font.render(
+            "Game Over", False, 'white')
+        game_over_rect = game_over_message.get_rect(
+            center=(screen_width/2, screen_height/2 + 100))
+
+        game_over_message_1 = game_font.render(
+            f"Final Score: {game.score}", False, 'white')
+        game_over_rect_1 = game_over_message_1.get_rect(
+            center=(screen_width/2, screen_height/2 + 125))
+
+        screen.fill((30, 30, 30))
+        screen.blit(game_logo,game_logo_rect)
+        screen.blit(game_over_message, game_over_rect)
+        screen.blit(game_over_message_1, game_over_rect_1)
         crt.draw()
         pygame.display.flip()
 
     def state_manager(self):
         if self.state == "intro":
             self.intro()
-        if self.state == "main_game":
-            self.main_game()
-        if self.state == "outro":
-            self.outro()
+        if self.state == "level_1":
+            self.level_1()
+        if self.state == "level_2":
+            self.level_2()
+        if self.state == "level_3":
+            self.level_3()
+        if self.state == "level_4":
+            self.level_4()
+        if self.state == "level_5":
+            self.level_5()
+        if self.state == "game_over":
+            self.game_over()
 
 
 if __name__ == '__main__':
