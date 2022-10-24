@@ -1,8 +1,8 @@
 from random import choice, randint
 import pygame
 import sys
-from player import Player
 import obstacle
+from player import Player
 from aliens import Alien, Extra
 from laser import Laser
 
@@ -191,7 +191,6 @@ class Game:
         self.display_score()
         self.victory_message()
 
-
 class CRT:
     def __init__(self):
         self.tv = pygame.image.load('Images/tv.png').convert_alpha()
@@ -211,7 +210,6 @@ class CRT:
         self.tv.set_alpha(randint(75, 90))
         self.create_crt_lines()
         screen.blit(self.tv, (0, 0))
-
 
 class GameState():
     def __init__(self):
