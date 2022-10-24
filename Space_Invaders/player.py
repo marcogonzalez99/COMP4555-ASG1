@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.laser_cooldown = 500
 
         self.lasers = pygame.sprite.Group()
+        # Use If statements to change the sound of the laser
         self.laser_sound = pygame.mixer.Sound('Sounds/audio_laser.wav')
         self.laser_sound.set_volume(0.1)
 
