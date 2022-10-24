@@ -57,6 +57,7 @@ class Game:
         
         # Win Condition
         self.level_won = False
+        self.win_timer = 0
 
     def create_obstacle(self, x_start, y_start, offset_x):
         for row_index, row in enumerate(self.shape):
@@ -186,32 +187,57 @@ class Game:
             game_state.state = "level_2"
             self.state = "level_2"
             self.alien_setup(rows=7, cols=9)
+            self.win_timer = 0
         elif self.state == "level_2":
             game_state.state = "level_3"
             self.state = "level_3"
             self.alien_setup(rows=7, cols=9)
+            self.win_timer = 0
         elif self.state == "level_3":
             game_state.state = "level_4"
             self.state = "level_4"
             self.alien_setup(rows=7, cols=9)
+            self.win_timer = 0
         elif self.state == "level_4":
             game_state.state = "level_5"
             self.state = "level_5"
             self.alien_setup(rows=7, cols=9)
+            self.win_timer = 0
         elif self.state == "level_5":
             game_state.state = "game_over"
             self.state = "game_over"
             self.alien_setup(rows=7, cols=9)
 
     def victory_message(self):
-        self.win_timer = 0
         if not self.aliens.sprites():
+            print(self.win_timer)
             self.win_timer += 1
-            victory_surface = self.font.render('You Won', False, 'white')
-            victory_rect = victory_surface.get_rect(
+            if self.win_timer < 100:
+                victory_surface = self.font.render('You Won', False, 'white')
+                victory_rect = victory_surface.get_rect(
                     center=(screen_width/2, screen_height/2))
-            screen.blit(victory_surface, victory_rect)
-            if self.win_timer <= 50:
+                screen.blit(victory_surface, victory_rect)
+            elif 100 < self.win_timer < 200:
+                victory_surface = self.font.render('Next Level Starting', False, 'white')
+                victory_rect = victory_surface.get_rect(
+                    center=(screen_width/2, screen_height/2))
+                screen.blit(victory_surface, victory_rect)
+            elif 200 < self.win_timer < 275:
+                victory_surface = self.font.render('3', False, 'white')
+                victory_rect = victory_surface.get_rect(
+                    center=(screen_width/2, screen_height/2))
+                screen.blit(victory_surface, victory_rect)
+            elif 275 < self.win_timer < 325:
+                victory_surface = self.font.render('2', False, 'white')
+                victory_rect = victory_surface.get_rect(
+                    center=(screen_width/2, screen_height/2))
+                screen.blit(victory_surface, victory_rect)
+            elif 325 < self.win_timer < 400:
+                victory_surface = self.font.render('1', False, 'white')
+                victory_rect = victory_surface.get_rect(
+                    center=(screen_width/2, screen_height/2))
+                screen.blit(victory_surface, victory_rect)
+            if self.win_timer > 400:
                 self.level_won = False
                 self.next_round()
                 

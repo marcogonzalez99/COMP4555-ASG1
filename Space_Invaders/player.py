@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
         self.max_x = constraint
         self.ready = True
         self.laser_time = 0
-        self.laser_cooldown = 500
+        self.laser_cooldown = 50
 
         self.lasers = pygame.sprite.Group()
         self.laser_sound = pygame.mixer.Sound('Sounds/audio_laser.wav')
