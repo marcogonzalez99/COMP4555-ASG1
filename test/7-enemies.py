@@ -11,16 +11,18 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Space Invaders")
 
 # json
-f = open('config.json')
+f = open("test/config.json")
 data = json.load(f)
 level_1 = data["game_details"][0]
+level_2 = data["game_details"][1]
+level_3 = data["game_details"][2]
 
 
 # Background
-background = pygame.image.load("./media/stars.png")
+background = pygame.image.load("test/media/stars.png")
 
 # Player
-playerImg = pygame.image.load("./media/spaceship.png")
+playerImg = pygame.image.load("test/media/spaceship.png")
 playerX = 370 
 playerY = 480
 playerX_change = 0
@@ -31,21 +33,21 @@ enemyX = []
 enemyY = []
 enemyX_change = []
 enemyY_change = []
-num_enemies = level_1["num_enemies"] #define how many enemies
+num_enemies = level_3["num_enemies"] #define how many enemies
 
 for i in range(num_enemies): #loop to create 6 enemies
-	enemyImg.append(pygame.image.load("./media/ufo.png"))
+	enemyImg.append(pygame.image.load("test/media/ufo.png"))
 	enemyX.append(random.randint(0, 735))
 	enemyY.append(random.randint(50, 150))
 	enemyX_change.append(2)
 	enemyY_change.append(40)
 
 #Bullet
-bulletImg = pygame.image.load("./media/bullet.png") 
+bulletImg = pygame.image.load("test/media/bullet.png") 
 bulletX = 0 
 bulletY = 480 
 bulletX_change = 0 
-bulletY_change = level_1["bulletY_change"]
+bulletY_change = level_3["bulletY_change"]
 bullet_state = "ready" 
 
 score = 0
