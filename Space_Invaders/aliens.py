@@ -1,16 +1,18 @@
 import pygame
-
+import json
 
 class Alien(pygame.sprite.Sprite):
     def __init__(self, color, x, y, level):
         super().__init__()
-        file_path = 'Images/' + color + ".png"
+        file_path = 'Space_invaders/' + 'Images/' + color + ".png"
         self.image = pygame.image.load(file_path).convert_alpha()
         self.rect = self.image.get_rect(topleft=(x, y))
         self.level = level
-        if self.level == 1:
-            if color == 'red':
-                self.value = 50
+
+        # Get level specific data
+        for level in self.level_settings:
+            if level["level"] == self.level:
+                self.value = level[f"{color}_value"]
 
     def update(self, direction):
         self.rect.x += direction
