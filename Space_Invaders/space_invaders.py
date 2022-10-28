@@ -44,9 +44,10 @@ class Game:
 
         # Alien Setup
         self.aliens = pygame.sprite.Group()
+        
         # Create the level 1 layout for the game
         self.alien_setup(rows=6, cols=6)
-        self.alien_direction = 1
+        self.alien_direction = self.alien_speed
         self.alien_lasers = pygame.sprite.Group()
 
         # Extra - Bonus Alien
@@ -82,16 +83,18 @@ class Game:
 
     # Function to setup the aliens for the game
     def alien_setup(self, rows, cols, x_distance=60, y_distance=48, x_offset=70, y_offset=50):
+        # Get level specific data
+        for level in self.level_settings:
+            if level["level"] == self.level_num:
+                self.alien_speed = level["alien_speed"]
+                alien_colour = level["alien_colour"]
+
         for row_index, row in enumerate(range(rows)):
             for col_index, col in enumerate(range(cols)):
                 x = col_index * x_distance + x_offset
                 y = row_index * y_distance + y_offset
-
-                for level in self.level_settings:
-                    if level["level"] == self.level_num:
-                        alien_colour = level["alien_colour"]
                         
-                alien_sprite = Alien(alien_colour, x, y, 1)
+                alien_sprite = Alien(alien_colour, x, y, self.level_num)
                 self.aliens.add(alien_sprite)
 
     def alien_position_checker(self):
@@ -99,11 +102,11 @@ class Game:
         for alien in all_aliens:
             # We are adding state management here as well to change speed
             if alien.rect.right >= screen_width:
-                self.alien_direction = -1
-                self.alien_move_down(1)
+                self.alien_direction = -1.0 * self.alien_speed
+                self.alien_move_down(self.alien_speed)
             elif alien.rect.left <= 0:
-                self.alien_direction = 1
-                self.alien_move_down(1)
+                self.alien_direction = self.alien_speed
+                self.alien_move_down(self.alien_speed)
 
     def alien_move_down(self, distance):
         if self.aliens:
@@ -192,9 +195,14 @@ class Game:
         else:
             self.level_num += 1
 
+        # Get level specific data
+        for level in self.level_settings:
+            if level["level"] == self.level_num:
+                level_num = level["level"]
+
         # Update player sprite
         self.player.remove(self.player_sprite)
-        player_sprite = Player((screen_width/2, screen_height), screen_width, 5, self.level_num)
+        player_sprite = Player((screen_width/2, screen_height), screen_width, 5, level_num)
         self.player = pygame.sprite.GroupSingle(player_sprite)
 
         # Update alien setup
@@ -288,7 +296,7 @@ class GameState():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.state = "main" # switch states
+                self.state = "main" # start game
 
         # Intro text
         intro_message = game_font.render(
@@ -310,9 +318,20 @@ class GameState():
                 sys.exit()
             if event.type == ALIENLASER:
                 game.alien_shoot()
+            # force advance level
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    game.aliens.empty()
+                    game.next_round()
                 
+        # Get specific level data
+        for level in game.level_settings:
+            if level["level"] == game.level_num:
+                level_num = level["level"]
+                # Add other variables here to customize level
+        
         # Level text
-        level_message = game_font.render(f"Level {game.level_num}", False, 'white')
+        level_message = game_font.render(f"Level {level_num}", False, 'white')
         level_rect = level_message.get_rect(center=(screen_width/2, 25))
 
         screen.fill((30, 30, 30))

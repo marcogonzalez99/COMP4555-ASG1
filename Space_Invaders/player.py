@@ -7,10 +7,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.level = level
         # To change the design of the ship
-        if self.level == 1:
-            self.image = pygame.image.load("Space_invaders/Images/player_1.png").convert_alpha()
-        else:
-            self.image = pygame.image.load("Space_invaders/Images/player.png").convert_alpha()
+        # self.image = pygame.image.load(f"Space_invaders/Images/player_{level}.png").convert_alpha()
+        self.image = pygame.image.load(f"Space_invaders/Images/player_1.png").convert_alpha() # hardcode first ship
         self.rect = self.image.get_rect(midbottom=pos)
         self.speed = speed
         self.max_x = constraint

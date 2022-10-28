@@ -3,27 +3,37 @@
         {
             "level" : 1,
             "alien_colour" : "red",
-            "speed" : 10
+            "alien_speed" : 1,
+            "red_value" : 50,
+            "white_value" : 100
         },
         {
             "level" : 2,
             "alien_colour" : "white",
-            "speed" : 10
+            "alien_speed" : 1.5,
+            "red_value" : 50,
+            "white_value" : 100
         },
         {
             "level" : 3,
             "alien_colour" : "red",
-            "speed" : 10
+            "alien_speed" : 2,
+            "red_value" : 50,
+            "white_value" : 100
         },
         {
             "level" : 4,
             "alien_colour" : "red",
-            "speed" : 10
+            "alien_speed" : 2.5,
+            "red_value" : 50,
+            "white_value" : 100
         },
         {
             "level" : 5,
             "alien_colour" : "white",
-            "speed" : 10
+            "alien_speed" : 3,
+            "red_value" : 50,
+            "white_value" : 100
         }
     ]
 }
