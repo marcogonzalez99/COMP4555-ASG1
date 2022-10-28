@@ -2,7 +2,27 @@
     "level_settings": [
         {
             "level" : 1,
-            "enemy_colour" : "red",
+            "alien_colour" : "red",
+            "speed" : 10
+        },
+        {
+            "level" : 2,
+            "alien_colour" : "white",
+            "speed" : 10
+        },
+        {
+            "level" : 3,
+            "alien_colour" : "red",
+            "speed" : 10
+        },
+        {
+            "level" : 4,
+            "alien_colour" : "red",
+            "speed" : 10
+        },
+        {
+            "level" : 5,
+            "alien_colour" : "white",
             "speed" : 10
         }
     ]
