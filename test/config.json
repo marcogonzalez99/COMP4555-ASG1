@@ -7,13 +7,13 @@
         },
         {
             "level" : 2,
-            "num_enemies" : 8,
-            "bulletY_change" : 12
+            "num_enemies" : 20,
+            "bulletY_change" : 20
         },
         {
             "level" : 3,
-            "num_enemies" : 10,
-            "bulletY_change" : 14
+            "num_enemies" : 80,
+            "bulletY_change" : 50
         }
     ]
 }
