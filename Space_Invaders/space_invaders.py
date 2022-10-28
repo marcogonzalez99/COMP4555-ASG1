@@ -2,6 +2,7 @@ from random import choice, randint
 import pygame
 import sys
 import obstacle
+import json
 from player import Player
 from aliens import Alien, Extra
 from laser import Laser
@@ -9,8 +10,15 @@ from laser import Laser
 
 class Game:
     def __init__(self):
+        # json
+        file = open("Space_invaders/config.json")
+        data = json.load(file)
+        self.level_settings = data["level_settings"]
+
         # Setting the state of the game to start at level 1
-        self.state = "level_1"
+        # self.state = "level_1"
+        self.level_num = 1
+
         # Player Setup
         self.player_sprite = Player(
             (screen_width/2, screen_height), screen_width, 5,1)
@@ -80,13 +88,24 @@ class Game:
                 x = col_index * x_distance + x_offset
                 y = row_index * y_distance + y_offset
                 
-                # Alien Layout for level 1
-                if self.state == "level_1":
-                    alien_sprite = Alien('red', x, y,1)
-                    self.aliens.add(alien_sprite)
-                else:
-                    alien_sprite = Alien('green', x, y)
-                    self.aliens.add(alien_sprite)
+                # Alien Layout for each level
+
+                # if self.state == "level_1":
+                #     alien_sprite = Alien('red', x, y, 1)
+                #     self.aliens.add(alien_sprite)
+                # elif self.state == "level_5":
+                #     alien_sprite = Alien('white', x, y, 1)
+                #     self.aliens.add(alien_sprite)
+                # else:
+                #     alien_sprite = Alien('green', x, y)
+                #     self.aliens.add(alien_sprite)
+
+                for level in self.level_settings:
+                    if level["level"] == self.level_num:
+                        alien_colour = level["alien_colour"]
+                        
+                alien_sprite = Alien(alien_colour, x, y, 1)
+                self.aliens.add(alien_sprite)
 
     def alien_position_checker(self):
         all_aliens = self.aliens.sprites()
@@ -179,36 +198,53 @@ class Game:
     
     def next_round(self):
         # This function manages the state of the round, allows us to access state and alter it easily
-        if self.state == "level_1":
-            game_state.state = "level_2"
-            self.state = "level_2"
-            # Managing the player sprite
-            self.player.remove(self.player_sprite)
-            level_2_sprite = Player(
-                (screen_width/2, screen_height), screen_width, 5,2)
-            self.player = pygame.sprite.GroupSingle(level_2_sprite)
-            ##################################
-            self.alien_setup(rows=7, cols=9)
-            self.win_timer = 0
-        elif self.state == "level_2":
-            game_state.state = "level_3"
-            self.state = "level_3"
-            self.alien_setup(rows=7, cols=9)
-            self.win_timer = 0
-        elif self.state == "level_3":
-            game_state.state = "level_4"
-            self.state = "level_4"
-            self.alien_setup(rows=7, cols=9)
-            self.win_timer = 0
-        elif self.state == "level_4":
-            game_state.state = "level_5"
-            self.state = "level_5"
-            self.alien_setup(rows=7, cols=9)
-            self.win_timer = 0
-        elif self.state == "level_5":
+        if self.level_num == 5:
+            # end game
             game_state.state = "game_over"
             self.state = "game_over"
             self.alien_setup(rows=7, cols=9)
+        else:
+            self.level_num += 1
+
+        # Update player sprite
+        self.player.remove(self.player_sprite)
+        player_sprite = Player((screen_width/2, screen_height), screen_width, 5, self.level_num)
+        self.player = pygame.sprite.GroupSingle(player_sprite)
+
+        # Update alien setup
+        self.alien_setup(rows=7, cols=9)
+        self.win_timer = 0
+        
+        # if self.state == "level_1":
+        #     game_state.state = "level_2"
+        #     self.state = "level_2"
+        #     # Managing the player sprite
+        #     self.player.remove(self.player_sprite)
+        #     level_2_sprite = Player(
+        #         (screen_width/2, screen_height), screen_width, 5,2)
+        #     self.player = pygame.sprite.GroupSingle(level_2_sprite)
+        #     ##################################
+        #     self.alien_setup(rows=7, cols=9)
+        #     self.win_timer = 0
+        # elif self.state == "level_2":
+        #     game_state.state = "level_3"
+        #     self.state = "level_3"
+        #     self.alien_setup(rows=7, cols=9)
+        #     self.win_timer = 0
+        # elif self.state == "level_3":
+        #     game_state.state = "level_4"
+        #     self.state = "level_4"
+        #     self.alien_setup(rows=7, cols=9)
+        #     self.win_timer = 0
+        # elif self.state == "level_4":
+        #     game_state.state = "level_5"
+        #     self.state = "level_5"
+        #     self.alien_setup(rows=7, cols=9)
+        #     self.win_timer = 0
+        # elif self.state == "level_5":
+        #     game_state.state = "game_over"
+        #     self.state = "game_over"
+        #     self.alien_setup(rows=7, cols=9)
 
     def victory_message(self):
         if not self.aliens.sprites():
@@ -457,6 +493,8 @@ if __name__ == '__main__':
     # General Setup
     pygame.init()
     clock = pygame.time.Clock()
+    game = Game()
+    crt = CRT()
     game_state = GameState()
 
     # Game Screen
@@ -472,8 +510,6 @@ if __name__ == '__main__':
 
     # Font
     game_font = pygame.font.Font('Space_invaders/Pixeltype.ttf', 40)
-    game = Game()
-    crt = CRT()
     ALIENLASER = pygame.USEREVENT + 1
     pygame.time.set_timer(ALIENLASER, 1200)
 

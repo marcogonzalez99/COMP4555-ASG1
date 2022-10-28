@@ -1,0 +1,9 @@
+{
+    "level_settings": [
+        {
+            "level" : 1,
+            "enemy_colour" : "red",
+            "speed" : 10
+        }
+    ]
+}
