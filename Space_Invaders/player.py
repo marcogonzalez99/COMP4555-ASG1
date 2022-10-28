@@ -7,8 +7,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.level = level
         # To change the design of the ship
-        # self.image = pygame.image.load(f"Space_invaders/Images/player_{level}.png").convert_alpha()
-        self.image = pygame.image.load(f"Space_invaders/Images/player_1.png").convert_alpha() # hardcode first ship
+        # self.image = pygame.image.load(f"Images/player_{level}.png").convert_alpha()
+        self.image = pygame.image.load(f"Images/player_1.png").convert_alpha() # hardcode first ship
         self.rect = self.image.get_rect(midbottom=pos)
         self.speed = speed
         self.max_x = constraint
@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
 
         self.lasers = pygame.sprite.Group()
         # Use If statements to change the sound of the laser
-        self.laser_sound = pygame.mixer.Sound('Space_invaders/Sounds/audio_laser.wav')
+        self.laser_sound = pygame.mixer.Sound('Sounds/audio_laser.wav')
         self.laser_sound.set_volume(0.1)
 
     def get_input(self):
