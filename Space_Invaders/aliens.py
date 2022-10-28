@@ -4,6 +4,12 @@ import json
 class Alien(pygame.sprite.Sprite):
     def __init__(self, color, x, y, level):
         super().__init__()
+
+        # json
+        file = open("Space_invaders/config.json")
+        data = json.load(file)
+        self.level_settings = data["level_settings"]
+
         file_path = 'Space_invaders/' + 'Images/' + color + ".png"
         self.image = pygame.image.load(file_path).convert_alpha()
         self.rect = self.image.get_rect(topleft=(x, y))
