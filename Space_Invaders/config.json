@@ -5,14 +5,26 @@
             "alien_colour" : "red",
             "alien_speed" : 1,
             "red_value" : 50,
-            "white_value" : 100
+            "white_value" : 100,
+            "ship_img_path" : "Images/player_1.png",
+            "bgm_path" : "Sounds/music.wav",
+            "laser_fx_path" : "Sounds/audio_laser.wav",
+            "explosion_fx_path" : "Sounds/audio_explosion.wav",
+            "win_fx_path" : "",
+            "bg_path" : ""
         },
         {
             "level" : 2,
             "alien_colour" : "white",
             "alien_speed" : 1.5,
             "red_value" : 50,
-            "white_value" : 100
+            "white_value" : 100,
+            "ship_img_path" : "Images/spaceship_2.png",
+            "bgm_path" : "Sounds/music_level2.wav",
+            "laser_fx_path" : "Sounds/audio_laser2.mp3",
+            "explosion_fx_path" : "Sounds/audio_explosion2.mp3",
+            "win_fx_path" : "Sounds/audio_win2.wav",
+            "bg_path" : ""
         },
         {
             "level" : 3,
@@ -20,21 +32,39 @@
             "alien_speed" : 2,
             "red_value" : 50,
             "white_value" : 100,
-            "green_value" : 150
+            "green_value" : 150,
+            "ship_img_path" : "Images/player_3.png",
+            "bgm_path" : "Sounds/music_level3.wav",
+            "laser_fx_path" : "Sounds/audio_laser3.wav",
+            "explosion_fx_path" : "Sounds/audio_explosion3.wav",
+            "win_fx_path" : "Sounds/audio_win3.wav",
+            "bg_path" : ""
         },
         {
             "level" : 4,
             "alien_colour" : "red",
             "alien_speed" : 2.5,
             "red_value" : 50,
-            "white_value" : 100
+            "white_value" : 100,
+            "ship_img_path" : "",
+            "bgm_path" : "",
+            "laser_fx_path" : "",
+            "explosion_fx_path" : "",
+            "win_fx_path" : "",
+            "bg_path" : ""
         },
         {
             "level" : 5,
             "alien_colour" : "white",
             "alien_speed" : 3,
             "red_value" : 50,
-            "white_value" : 100
+            "white_value" : 100,
+            "ship_img_path" : "",
+            "bgm_path" : "",
+            "laser_fx_path" : "",
+            "explosion_fx_path" : "",
+            "win_fx_path" : "",
+            "bg_path" : ""
         }
     ]
 }
