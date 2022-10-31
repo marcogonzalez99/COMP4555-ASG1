@@ -5,12 +5,12 @@ class Alien(pygame.sprite.Sprite):
     def __init__(self, color, x, y, level):
         super().__init__()
 
-        # json
+        # Load Settings
         file = open("config.json")
         data = json.load(file)
         self.level_settings = data["level_settings"]
 
-        file_path = '' + 'Images/' + color + ".png"
+        file_path = 'Images/' + color + ".png"
         self.image = pygame.image.load(file_path).convert_alpha()
         self.rect = self.image.get_rect(topleft=(x, y))
         self.level = level

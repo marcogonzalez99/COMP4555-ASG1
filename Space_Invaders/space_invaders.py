@@ -10,7 +10,7 @@ from laser import Laser
 
 class Game:
     def __init__(self):
-        # json
+        # Load Settings
         file = open("config.json")
         data = json.load(file)
         self.level_settings = data["level_settings"]
@@ -50,18 +50,12 @@ class Game:
         self.alien_direction = self.alien_speed
         self.alien_lasers = pygame.sprite.Group()
 
+        # Sound setup
+        self.set_sounds()
+
         # Extra - Bonus Alien
         self.extra = pygame.sprite.GroupSingle()
         self.extra_spawn_time = randint(400, 800)
-
-        # Audio - These are for level 1, we change these with states
-        music = pygame.mixer.Sound('Sounds/music.wav')
-        music.set_volume(0.1)
-        music.play(loops=-1)
-        self.laser_sound = pygame.mixer.Sound('Sounds/audio_laser.wav')
-        self.laser_sound.set_volume(0.1)
-        self.explosion_sound = pygame.mixer.Sound('Sounds/audio_explosion.wav')
-        self.explosion_sound.set_volume(0.1)
         
         # Win Condition
         self.level_won = False
@@ -241,8 +235,23 @@ class Game:
             if self.win_timer > 425:
                 self.level_won = False
                 self.next_round()
-                
 
+    def set_sounds(self):
+        # Get level attributes
+        for level in self.level_settings:
+            if level["level"] == self.level_num:
+                self.bgm_path = level["bgm_path"]
+                self.explosion_fx_path = level["explosion_fx_path"]
+                self.laser_fx_path = level["laser_fx_path"]
+
+        music = pygame.mixer.Sound(self.bgm_path)
+        music.set_volume(0.1)
+        music.play(loops=-1)
+        self.laser_sound = pygame.mixer.Sound(self.laser_fx_path)
+        self.laser_sound.set_volume(0.1)
+        self.explosion_sound = pygame.mixer.Sound(self.explosion_fx_path)
+        self.explosion_sound.set_volume(0.1)
+                
     def run(self):
         # Updates
         self.player.update()
