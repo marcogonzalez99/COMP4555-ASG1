@@ -46,7 +46,7 @@
             "alien_speed" : 2.5,
             "red_value" : 50,
             "white_value" : 100,
-            "ship_img_path" : "",
+            "ship_img_path" : "Images/spaceship_4.png",
             "bgm_path" : "",
             "laser_fx_path" : "",
             "explosion_fx_path" : "",

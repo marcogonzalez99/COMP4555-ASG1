@@ -84,6 +84,7 @@ class Game:
                 alien_colour = level["alien_colour"]
 
         for row_index, row in enumerate(range(rows)):
+            # Add row enemy logic
             for col_index, col in enumerate(range(cols)):
                 x = col_index * x_distance + x_offset
                 y = row_index * y_distance + y_offset
@@ -151,8 +152,7 @@ class Game:
                     laser.kill()
                     self.lives -= 1
                     if self.lives <= 0:
-                        pygame.quit()
-                        sys.exit()
+                        game_state.state = "game_over"
 
         # Aliens Hitting Obstacle
         if self.aliens:
