@@ -26,7 +26,7 @@ class Game:
         # Health and Score setup
         self.lives = 3
         self.life_surface = pygame.image.load(
-            "Images/player.png").convert_alpha()
+            "Images/misc/player.png").convert_alpha()
         self.life_x_start_pos = screen_width - \
             (self.life_surface.get_size()[0] * 2 + 20)
         self.score = 0
@@ -276,7 +276,7 @@ class Game:
 
 class CRT:
     def __init__(self):
-        self.tv = pygame.image.load('Images/tv.png').convert_alpha()
+        self.tv = pygame.image.load('Images/misc/tv.png').convert_alpha()
         self.tv = pygame.transform.scale(
             self.tv, (screen_width, screen_height))
 
@@ -393,7 +393,7 @@ if __name__ == '__main__':
     pygame.display.set_caption("Space Invaders")
 
     # Images
-    game_logo = pygame.image.load('Images/game_logo.png')
+    game_logo = pygame.image.load('Images/misc/game_logo.png')
     game_logo_rect = game_logo.get_rect(
         center=(screen_width/2, screen_height/2 - 100))
 

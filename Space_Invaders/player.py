@@ -16,11 +16,11 @@ class Player(pygame.sprite.Sprite):
         # Get level attributes
         for level in self.level_settings:
             if level["level"] == self.level:
-                self.ship_img_path = level["ship_img_path"]
+                self.player_path = level["player_path"]
                 self.laser_fx_path = level["laser_fx_path"]
 
         # To change the design of the ship
-        self.image = pygame.image.load(self.ship_img_path).convert_alpha()
+        self.image = pygame.image.load(self.player_path).convert_alpha()
         self.rect = self.image.get_rect(midbottom=pos)
         self.speed = speed
         self.max_x = constraint

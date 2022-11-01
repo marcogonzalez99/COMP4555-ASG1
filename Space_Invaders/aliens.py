@@ -10,7 +10,7 @@ class Alien(pygame.sprite.Sprite):
         data = json.load(file)
         self.level_settings = data["level_settings"]
 
-        file_path = 'Images/' + color + ".png"
+        file_path = 'Images/alien/' + color + ".png"
         self.image = pygame.image.load(file_path).convert_alpha()
         self.rect = self.image.get_rect(topleft=(x, y))
         self.level = level
@@ -27,7 +27,7 @@ class Alien(pygame.sprite.Sprite):
 class Extra(pygame.sprite.Sprite):
     def __init__(self, side, screen_width):
         super().__init__()
-        self.image = pygame.image.load('Images/extra.png').convert_alpha()
+        self.image = pygame.image.load('Images/alien/extra.png').convert_alpha()
 
         if side == 'right':
             x = screen_width + 50
