@@ -205,7 +205,6 @@ class Game:
 
     def victory_message(self):
         if not self.aliens.sprites():
-            print(self.win_timer)
             self.win_timer += 1
             if self.win_timer < 100:
                 victory_surface = self.font.render('You Won', False, 'white')
