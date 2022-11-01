@@ -1,5 +1,4 @@
 import pygame
-import json
 from settings import Settings
 
 class Alien(pygame.sprite.Sprite):

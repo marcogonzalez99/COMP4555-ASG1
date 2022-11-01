@@ -1,5 +1,4 @@
 import pygame
-import json
 from laser import Laser
 from settings import Settings
 

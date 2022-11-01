@@ -2,7 +2,6 @@ from random import choice, randint
 import pygame
 import sys
 import obstacle
-import json
 from player import Player
 from aliens import Alien, Extra
 from laser import Laser
