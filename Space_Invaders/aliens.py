@@ -1,24 +1,23 @@
 import pygame
 import json
+from settings import Settings
 
 class Alien(pygame.sprite.Sprite):
-    def __init__(self, color, x, y, level):
+    def __init__(self, colour, x, y, level_num):
         super().__init__()
 
         # Load Settings
-        file = open("config.json")
-        data = json.load(file)
-        self.level_settings = data["level_settings"]
+        level_settings = Settings()
 
-        file_path = 'Images/alien/' + color + ".png"
+        # set colour
+        file_path = 'Images/alien/' + colour + ".png"
         self.image = pygame.image.load(file_path).convert_alpha()
         self.rect = self.image.get_rect(topleft=(x, y))
-        self.level = level
 
-        # Get level specific data
-        for level in self.level_settings:
-            if level["level"] == self.level:
-                self.value = level[f"{color}_value"]
+        # set value
+        values = level_settings.get_value(level_num, "values")
+        self.value = values[colour]
+
 
     def update(self, direction):
         self.rect.x += direction

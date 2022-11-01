@@ -1,36 +1,32 @@
 import pygame
 import json
 from laser import Laser
-
+from settings import Settings
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, constraint, speed, level):
+    def __init__(self, pos, constraint, speed, level_num):
         super().__init__()
-        self.level = level
-
+        
         # Load Settings
-        file = open("config.json")
-        data = json.load(file)
-        self.level_settings = data["level_settings"]
+        level_settings = Settings()
 
         # Get level attributes
-        for level in self.level_settings:
-            if level["level"] == self.level:
-                self.player_path = level["player_path"]
-                self.laser_fx_path = level["laser_fx_path"]
+        level = level_settings.get_level(level_num)
+        player_path = level["player_path"]
+        laser_fx_path = level["laser_fx_path"]
 
         # To change the design of the ship
-        self.image = pygame.image.load(self.player_path).convert_alpha()
+        self.image = pygame.image.load(player_path).convert_alpha()
         self.rect = self.image.get_rect(midbottom=pos)
         self.speed = speed
         self.max_x = constraint
         self.ready = True
         self.laser_time = 0
         self.laser_cooldown = 500
-
         self.lasers = pygame.sprite.Group()
-        # Use If statements to change the sound of the laser
-        self.laser_sound = pygame.mixer.Sound(self.laser_fx_path)
+
+        # Set laser sound
+        self.laser_sound = pygame.mixer.Sound(laser_fx_path)
         self.laser_sound.set_volume(0.1)
 
     def get_input(self):

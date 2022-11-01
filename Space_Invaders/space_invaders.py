@@ -6,21 +6,24 @@ import json
 from player import Player
 from aliens import Alien, Extra
 from laser import Laser
+from settings import Settings
 
 
 class Game:
     def __init__(self):
         # Load Settings
-        file = open("config.json")
-        data = json.load(file)
-        self.level_settings = data["level_settings"]
+        self.level_settings = Settings()
 
         # Setting the state of the game to start at level 1
         self.level_num = 1
 
+        # Get level settings
+        level = self.level_settings.get_level(1)
+        rows = level["rows"]
+        cols = level["cols"]
+
         # Player Setup
-        self.player_sprite = Player(
-            (screen_width/2, screen_height), screen_width, 5,1)
+        self.player_sprite = Player((screen_width/2, screen_height), screen_width, 5, self.level_num)
         self.player = pygame.sprite.GroupSingle(self.player_sprite)
 
         # Health and Score setup
@@ -46,7 +49,7 @@ class Game:
         self.aliens = pygame.sprite.Group()
         
         # Create the level 1 layout for the game
-        self.alien_setup(rows=6, cols=6)
+        self.alien_setup(rows, cols)
         self.alien_direction = self.alien_speed
         self.alien_lasers = pygame.sprite.Group()
 
@@ -77,14 +80,15 @@ class Game:
 
     # Function to setup the aliens for the game
     def alien_setup(self, rows, cols, x_distance=60, y_distance=48, x_offset=70, y_offset=50):
-        # Get level specific data
-        for level in self.level_settings:
-            if level["level"] == self.level_num:
-                self.alien_speed = level["alien_speed"]
-                alien_colour = level["alien_colour"]
+        # Get level settings
+        level = self.level_settings.get_level(self.level_num)
+        self.alien_speed = level["alien_speed"]
+        aliens = level["aliens"]
 
         for row_index, row in enumerate(range(rows)):
-            # Add row enemy logic
+            # get alien colour for row
+            alien_colour = aliens[row % len(aliens)]
+            
             for col_index, col in enumerate(range(cols)):
                 x = col_index * x_distance + x_offset
                 y = row_index * y_distance + y_offset
@@ -160,8 +164,7 @@ class Game:
                 pygame.sprite.spritecollide(alien, self.blocks, True)
 
                 if pygame.sprite.spritecollide(alien, self.player, False):
-                    pygame.quit()
-                    sys.exit()
+                    game_state.state = "game_over"
 
     def display_lives(self):
         for live in range(self.lives - 1):
@@ -189,18 +192,18 @@ class Game:
         else:
             self.level_num += 1
 
-        # Get level specific data
-        for level in self.level_settings:
-            if level["level"] == self.level_num:
-                level_num = level["level"]
+        # Get level settings
+        level = self.level_settings.get_level(self.level_num)
+        rows = level["rows"]
+        cols = level["cols"]
 
         # Update player sprite
         self.player.remove(self.player_sprite)
-        player_sprite = Player((screen_width/2, screen_height), screen_width, 5, level_num)
+        player_sprite = Player((screen_width/2, screen_height), screen_width, 5, self.level_num)
         self.player = pygame.sprite.GroupSingle(player_sprite)
 
         # Update alien setup
-        self.alien_setup(rows=7, cols=9)
+        self.alien_setup(rows, cols)
         self.win_timer = 0
 
     def victory_message(self):
@@ -237,18 +240,17 @@ class Game:
 
     def set_sounds(self):
         # Get level attributes
-        for level in self.level_settings:
-            if level["level"] == self.level_num:
-                self.bgm_path = level["bgm_path"]
-                self.explosion_fx_path = level["explosion_fx_path"]
-                self.laser_fx_path = level["laser_fx_path"]
+        level = self.level_settings.get_level(self.level_num)
+        bgm_path = level["bgm_path"]
+        explosion_fx_path = level["explosion_fx_path"]
+        laser_fx_path = level["laser_fx_path"]
 
-        music = pygame.mixer.Sound(self.bgm_path)
+        music = pygame.mixer.Sound(bgm_path)
         music.set_volume(0.1)
         music.play(loops=-1)
-        self.laser_sound = pygame.mixer.Sound(self.laser_fx_path)
+        self.laser_sound = pygame.mixer.Sound(laser_fx_path)
         self.laser_sound.set_volume(0.1)
-        self.explosion_sound = pygame.mixer.Sound(self.explosion_fx_path)
+        self.explosion_sound = pygame.mixer.Sound(explosion_fx_path)
         self.explosion_sound.set_volume(0.1)
                 
     def run(self):
@@ -333,13 +335,11 @@ class GameState():
                     game.next_round()
                 
         # Get specific level data
-        for level in game.level_settings:
-            if level["level"] == game.level_num:
-                level_num = level["level"]
-                # Add other variables here to customize level
+        bg_path = game.level_settings.get_value(game.level_num, "bg_path")
+        bg = pygame.image.load(bg_path)
         
         # Level text
-        level_message = game_font.render(f"Level {level_num}", False, 'white')
+        level_message = game_font.render(f"Level {game.level_num}", False, 'white')
         level_rect = level_message.get_rect(center=(screen_width/2, 25))
 
         screen.fill((30, 30, 30))

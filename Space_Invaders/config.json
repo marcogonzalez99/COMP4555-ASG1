@@ -2,23 +2,30 @@
     "level_settings": [
         {
             "level" : 1,
-            "alien_colour" : "red",
+            "rows" : 4,
+            "cols" : 6,
             "alien_speed" : 1,
-            "red_value" : 50,
-            "white_value" : 100,
+            "aliens" : ["red"],
+            "values" : {
+                "red" : 50
+            },
             "player_path" : "Images/player/player_1.png",
             "bgm_path" : "Sounds/bgm/music.wav",
             "laser_fx_path" : "Sounds/laser/audio_laser.wav",
             "explosion_fx_path" : "Sounds/explosion/audio_explosion.wav",
-            "win_fx_path" : "",
-            "bg_path" : ""
+            "win_fx_path" : "Sounds/win/audio_win2.wav",
+            "bg_path" : "Images/bg/bg_2.png"
         },
         {
             "level" : 2,
-            "alien_colour" : "white",
-            "alien_speed" : 1.5,
-            "red_value" : 50,
-            "white_value" : 100,
+            "rows" : 5,
+            "cols" : 9,
+            "alien_speed" : 1.25,
+            "aliens" : ["red", "blue"],
+            "values" : {
+                "red" : 100,
+                "blue" : 150
+            },
             "player_path" : "Images/player/player_2.png",
             "bgm_path" : "Sounds/bgm/music_level2.wav",
             "laser_fx_path" : "Sounds/laser/audio_laser2.mp3",
@@ -28,11 +35,15 @@
         },
         {
             "level" : 3,
-            "alien_colour" : "green",
-            "alien_speed" : 2,
-            "red_value" : 150,
-            "white_value" : 200,
-            "green_value" : 300,
+            "rows" : 6,
+            "cols" : 9,
+            "alien_speed" : 1.5,
+            "aliens" : ["red", "blue", "green"],
+            "values" : {
+                "red" : 150,
+                "blue" : 200,
+                "green" : 300
+            },
             "player_path" : "Images/player/player_3.png",
             "bgm_path" : "Sounds/bgm/music_level3.wav",
             "laser_fx_path" : "Sounds/laser/audio_laser3.wav",
@@ -42,29 +53,42 @@
         },
         {
             "level" : 4,
-            "alien_colour" : "blue",
-            "alien_speed" : 2.5,
-            "red_value" : 50,
-            "white_value" : 100,
-            "player_path" : "",
-            "bgm_path" : "",
-            "laser_fx_path" : "",
-            "explosion_fx_path" : "",
-            "win_fx_path" : "",
-            "bg_path" : ""
+            "rows" : 7,
+            "cols" : 9,
+            "alien_speed" : 2,
+            "aliens" : ["red", "blue", "green", "orange"],
+            "values" : {
+                "red" : 200,
+                "blue" : 250,
+                "green" : 300,
+                "orange" : 400
+            },
+            "player_path" : "Images/player/player_3.png",
+            "bgm_path" : "Sounds/bgm/music_level3.wav",
+            "laser_fx_path" : "Sounds/laser/audio_laser3.wav",
+            "explosion_fx_path" : "Sounds/explosion/audio_explosion3.wav",
+            "win_fx_path" : "Sounds/win/audio_win3.wav",
+            "bg_path" : "Images/bg/bg_3.png"
         },
         {
             "level" : 5,
-            "alien_colour" : "white",
-            "alien_speed" : 3,
-            "red_value" : 50,
-            "white_value" : 100,
-            "player_path" : "",
-            "bgm_path" : "",
-            "laser_fx_path" : "",
-            "explosion_fx_path" : "",
-            "win_fx_path" : "",
-            "bg_path" : ""
+            "rows" : 8,
+            "cols" : 9,
+            "alien_speed" : 2.5,
+            "aliens" : ["red", "blue", "green", "orange", "white"],
+            "values" : {
+                "red" : 200,
+                "blue" : 250,
+                "green" : 300,
+                "orange" : 350,
+                "white" : 500
+            },
+            "player_path" : "Images/player/player_3.png",
+            "bgm_path" : "Sounds/bgm/music_level3.wav",
+            "laser_fx_path" : "Sounds/laser/audio_laser3.wav",
+            "explosion_fx_path" : "Sounds/explosion/audio_explosion3.wav",
+            "win_fx_path" : "Sounds/win/audio_win3.wav",
+            "bg_path" : "Images/bg/bg_3.png"
         }
     ]
 }
