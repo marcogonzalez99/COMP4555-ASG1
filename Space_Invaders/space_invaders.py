@@ -337,12 +337,14 @@ class GameState():
         # Get specific level data
         bg_path = game.level_settings.get_value(game.level_num, "bg_path")
         bg = pygame.image.load(bg_path)
+        bg = pygame.transform.scale(bg, (screen_width, screen_height))
         
         # Level text
         level_message = game_font.render(f"Level {game.level_num}", False, 'white')
         level_rect = level_message.get_rect(center=(screen_width/2, 25))
 
         screen.fill((30, 30, 30))
+        screen.blit(bg, (0, 0))
         screen.blit(level_message, level_rect)
         game.run()
         crt.draw()
