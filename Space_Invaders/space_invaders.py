@@ -155,7 +155,7 @@ class Game:
                     laser.kill()
                     self.lives -= 1
                     if self.lives <= 0:
-                        game_state.state = "game_over"
+                        game_state.set_state("game_over")
 
         # Aliens Hitting Obstacle
         if self.aliens:
@@ -163,7 +163,7 @@ class Game:
                 pygame.sprite.spritecollide(alien, self.blocks, True)
 
                 if pygame.sprite.spritecollide(alien, self.player, False):
-                    game_state.state = "game_over"
+                    game_state.set_state("game_over")
 
     def display_lives(self):
         for live in range(self.lives - 1):
@@ -186,10 +186,11 @@ class Game:
         # This function manages the state of the round, allows us to access state and alter it easily
         if self.level_num == 5:
             # end game
-            game_state.state = "game_over"
-            self.alien_setup(rows=7, cols=9)
+            game_state.set_state("game_over")
+            self.alien_setup(rows=0, cols=0)
         else:
             self.level_num += 1
+            game_state.set_state("main")
 
         # Get level settings
         level = self.level_settings.get_level(self.level_num)
@@ -204,6 +205,10 @@ class Game:
         # Update alien setup
         self.alien_setup(rows, cols)
         self.win_timer = 0
+
+        # Update sounds
+        self.music.stop()
+        self.set_sounds()
 
     def victory_message(self):
         if not self.aliens.sprites():
@@ -244,9 +249,9 @@ class Game:
         explosion_fx_path = level["explosion_fx_path"]
         laser_fx_path = level["laser_fx_path"]
 
-        music = pygame.mixer.Sound(bgm_path)
-        music.set_volume(0.1)
-        music.play(loops=-1)
+        self.music = pygame.mixer.Sound(bgm_path)
+        self.music.set_volume(0.1)
+        self.music.play(loops=-1)
         self.laser_sound = pygame.mixer.Sound(laser_fx_path)
         self.laser_sound.set_volume(0.1)
         self.explosion_sound = pygame.mixer.Sound(explosion_fx_path)
@@ -297,26 +302,56 @@ class CRT:
 
 class GameState():
     def __init__(self):
-        self.state = "intro"
+        self.set_state("intro")
 
+    def set_state(self, state):
+        self.state = state
+        if self.state == "intro":
+            # Intro text
+            self.intro_message = game_font.render("Click to Start", False, 'white')
+            self.intro_rect = self.intro_message.get_rect(
+                center=(screen_width/2, screen_height/2 + 150))
+
+        if self.state == "main":
+            # Get specific level data
+            bg_path = game.level_settings.get_value(game.level_num, "bg_path")
+            self.bg = pygame.image.load(bg_path)
+            self.bg = pygame.transform.scale(self.bg, (screen_width, screen_height))
+        
+            # Level text
+            self.level_message = game_font.render(f"Level {game.level_num}", False, 'white')
+            self.level_rect = self.level_message.get_rect(
+                center=(screen_width/2, 25))
+
+        if self.state == "game_over":
+            # Outro text
+            self.game_over_message = game_font.render("Game Over", False, 'white')
+            self.game_over_rect = self.game_over_message.get_rect(
+                center=(screen_width/2, screen_height/2 + 100))
+
+            self.game_over_message_1 = game_font.render(f"Final Score: {game.score}", False, 'white')
+            self.game_over_rect_1 = self.game_over_message_1.get_rect(
+                center=(screen_width/2, screen_height/2 + 125))
+
+    def state_manager(self):
+        if self.state == "intro":
+            self.intro()
+        if self.state == "main":
+            self.main()
+        if self.state == "game_over":
+            self.game_over()
+    
     def intro(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.state = "main" # start game
-
-        # Intro text
-        intro_message = game_font.render(
-            "Click to Start", False, 'white')
-        intro_rect = intro_message.get_rect(
-            center=(screen_width/2, screen_height/2 + 150))
+                self.set_state("main") # start game
 
         screen.fill((30, 30, 30))
-        screen.blit(intro_message, intro_rect)
+        screen.blit(self.intro_message, self.intro_rect)
         screen.blit(game_logo, game_logo_rect)
-
         crt.draw()
         pygame.display.flip()
 
@@ -333,18 +368,9 @@ class GameState():
                     game.aliens.empty()
                     game.next_round()
                 
-        # Get specific level data
-        bg_path = game.level_settings.get_value(game.level_num, "bg_path")
-        bg = pygame.image.load(bg_path)
-        bg = pygame.transform.scale(bg, (screen_width, screen_height))
-        
-        # Level text
-        level_message = game_font.render(f"Level {game.level_num}", False, 'white')
-        level_rect = level_message.get_rect(center=(screen_width/2, 25))
-
         screen.fill((30, 30, 30))
-        screen.blit(bg, (0, 0))
-        screen.blit(level_message, level_rect)
+        screen.blit(self.bg, (0, 0))
+        screen.blit(self.level_message, self.level_rect)
         game.run()
         crt.draw()
         pygame.display.flip()
@@ -355,37 +381,20 @@ class GameState():
                 pygame.quit()
                 sys.exit()
 
-        # Outro text
-        game_over_message = game_font.render(
-            "Game Over", False, 'white')
-        game_over_rect = game_over_message.get_rect(
-            center=(screen_width/2, screen_height/2 + 100))
-
-        game_over_message_1 = game_font.render(
-            f"Final Score: {game.score}", False, 'white')
-        game_over_rect_1 = game_over_message_1.get_rect(
-            center=(screen_width/2, screen_height/2 + 125))
-
         screen.fill((30, 30, 30))
         screen.blit(game_logo,game_logo_rect)
-        screen.blit(game_over_message, game_over_rect)
-        screen.blit(game_over_message_1, game_over_rect_1)
+        screen.blit(self.game_over_message, self.game_over_rect)
+        screen.blit(self.game_over_message_1, self.game_over_rect_1)
         crt.draw()
         pygame.display.flip()
-
-    def state_manager(self):
-        if self.state == "intro":
-            self.intro()
-        if self.state == "main":
-            self.main()
-        if self.state == "game_over":
-            self.game_over()
 
 if __name__ == '__main__':
     # General Setup
     pygame.init()
     clock = pygame.time.Clock()
-    game_state = GameState()
+
+    # Font
+    game_font = pygame.font.Font('Pixeltype.ttf', 40)
 
     # Game Screen
     screen_width = 700
@@ -398,8 +407,7 @@ if __name__ == '__main__':
     game_logo_rect = game_logo.get_rect(
         center=(screen_width/2, screen_height/2 - 100))
 
-    # Font
-    game_font = pygame.font.Font('Pixeltype.ttf', 40)
+    game_state = GameState()
     game = Game()
     crt = CRT()
     ALIENLASER = pygame.USEREVENT + 1
