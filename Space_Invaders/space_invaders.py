@@ -60,7 +60,6 @@ class Game:
         self.extra_spawn_time = randint(400, 800)
         
         # Win Condition
-        self.level_won = False
         self.win_timer = 0
 
     def create_obstacle(self, x_start, y_start, offset_x):
@@ -177,10 +176,10 @@ class Game:
         score_rect = score_message.get_rect(topleft=(10, 10))
         screen.blit(score_message, score_rect)
 
-    def win_check(self):
-        if self.level_won:
-            self.next_round()
-            self.level_won = False
+    def victory_sound(self):
+        # stop music and play victory sound
+        self.music.stop()
+        self.win_fx.play()
     
     def next_round(self):
         # This function manages the state of the round, allows us to access state and alter it easily
@@ -204,43 +203,42 @@ class Game:
 
         # Update alien setup
         self.alien_setup(rows, cols)
-        self.win_timer = 0
 
         # Update sounds
-        self.music.stop()
         self.set_sounds()
 
-    def victory_message(self):
+    def victory_timer(self):
         if not self.aliens.sprites():
             self.win_timer += 1
-            if self.win_timer < 100:
+            victory_surface = self.font.render('', False, 'white')
+
+            if self.win_timer == 1:
+                self.victory_sound()
+
+            elif self.win_timer < 100:
                 victory_surface = self.font.render('You Won', False, 'white')
-                victory_rect = victory_surface.get_rect(
-                    center=(screen_width/2, screen_height/2))
-                screen.blit(victory_surface, victory_rect)
+                
+            elif 100 < self.win_timer < 425 and self.level_num == 5:
+                victory_surface = self.font.render('Congratulations', False, 'white')
+            
             elif 100 < self.win_timer < 200:
                 victory_surface = self.font.render('Next Level Starting', False, 'white')
-                victory_rect = victory_surface.get_rect(
-                    center=(screen_width/2, screen_height/2))
-                screen.blit(victory_surface, victory_rect)
+            
             elif 200 < self.win_timer < 275:
                 victory_surface = self.font.render('3', False, 'white')
-                victory_rect = victory_surface.get_rect(
-                    center=(screen_width/2, screen_height/2))
-                screen.blit(victory_surface, victory_rect)
+            
             elif 275 < self.win_timer < 350:
                 victory_surface = self.font.render('2', False, 'white')
-                victory_rect = victory_surface.get_rect(
-                    center=(screen_width/2, screen_height/2))
-                screen.blit(victory_surface, victory_rect)
+            
             elif 350 < self.win_timer < 425:
                 victory_surface = self.font.render('1', False, 'white')
-                victory_rect = victory_surface.get_rect(
-                    center=(screen_width/2, screen_height/2))
-                screen.blit(victory_surface, victory_rect)
-            if self.win_timer > 425:
-                self.level_won = False
+            
+            elif self.win_timer > 425:
+                self.win_timer = 0
                 self.next_round()
+
+            victory_rect = victory_surface.get_rect(center=(screen_width/2, screen_height/2))
+            screen.blit(victory_surface, victory_rect)
 
     def set_sounds(self):
         # Get level attributes
@@ -248,14 +246,17 @@ class Game:
         bgm_path = level["bgm_path"]
         explosion_fx_path = level["explosion_fx_path"]
         laser_fx_path = level["laser_fx_path"]
+        win_fx_path = level["win_fx_path"]
 
         self.music = pygame.mixer.Sound(bgm_path)
-        self.music.set_volume(0.1)
+        self.music.set_volume(0.2)
         self.music.play(loops=-1)
         self.laser_sound = pygame.mixer.Sound(laser_fx_path)
         self.laser_sound.set_volume(0.1)
         self.explosion_sound = pygame.mixer.Sound(explosion_fx_path)
         self.explosion_sound.set_volume(0.1)
+        self.win_fx = pygame.mixer.Sound(win_fx_path)
+        self.win_fx.set_volume(0.2)
                 
     def run(self):
         # Updates
@@ -267,7 +268,6 @@ class Game:
         self.alien_position_checker() #Work on this to change the game speed
         self.extra_alien_timer()
         self.collision_checks()
-        self.win_check()
 
         # Drawings
         self.player.sprite.lasers.draw(screen)
@@ -278,7 +278,10 @@ class Game:
         self.extra.draw(screen)
         self.display_lives()
         self.display_score()
-        self.victory_message()
+
+        # Victory
+        self.victory_timer()
+            
 
 class CRT:
     def __init__(self):
@@ -365,8 +368,8 @@ class GameState():
             # force advance level
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
+                    game.aliens.sprites().clear()
                     game.aliens.empty()
-                    game.next_round()
                 
         screen.fill((30, 30, 30))
         screen.blit(self.bg, (0, 0))
