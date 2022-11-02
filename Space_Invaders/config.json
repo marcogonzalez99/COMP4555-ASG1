@@ -13,8 +13,8 @@
             "bgm_path" : "Sounds/bgm/music.wav",
             "laser_fx_path" : "Sounds/laser/audio_laser.wav",
             "explosion_fx_path" : "Sounds/explosion/audio_explosion.wav",
-            "win_fx_path" : "Sounds/win/audio_win2.wav",
-            "bg_path" : "Images/bg/bg_2.png"
+            "win_fx_path" : "Sounds/win/audio_win.wav",
+            "bg_path" : "Images/bg/bg_1.png"
         },
         {
             "level" : 2,
@@ -60,7 +60,7 @@
             "values" : {
                 "red" : 200,
                 "blue" : 250,
-                "green" : 300,
+                "green" : 350,
                 "orange" : 400
             },
             "player_path" : "Images/player/player_4.png",
@@ -77,10 +77,10 @@
             "alien_speed" : 2.5,
             "aliens" : ["red", "blue", "green", "orange", "white"],
             "values" : {
-                "red" : 200,
-                "blue" : 250,
-                "green" : 300,
-                "orange" : 350,
+                "red" : 250,
+                "blue" : 300,
+                "green" : 400,
+                "orange" : 450,
                 "white" : 500
             },
             "player_path" : "Images/player/player_5.png",
