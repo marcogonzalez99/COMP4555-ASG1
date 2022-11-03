@@ -26,11 +26,8 @@ class Game:
         self.player = pygame.sprite.GroupSingle(self.player_sprite)
 
         # Health and Score setup
-        self.lives = 3
-        self.life_surface = pygame.image.load(
-            "Images/misc/player.png").convert_alpha()
-        self.life_x_start_pos = screen_width - \
-            (self.life_surface.get_size()[0] * 2 + 20)
+        self.lives = 4
+        self.life_surface = pygame.image.load("Images/misc/player.png").convert_alpha()
         self.score = 0
         self.font = pygame.font.Font('Pixeltype.ttf', 40)
 
@@ -165,10 +162,9 @@ class Game:
                     game_state.set_state("game_over")
 
     def display_lives(self):
-        for live in range(self.lives - 1):
-            x = self.life_x_start_pos + \
-                (live * self.life_surface.get_size()[0] + 10)
-            screen.blit(self.life_surface, (x, 8))
+        for index in range(self.lives - 1):
+            x = screen_width - (self.life_surface.get_width() * (index + 1)) - 10
+            screen.blit(self.life_surface, (x, 10))
 
     def display_score(self):
         score_message = self.font.render(
@@ -249,21 +245,20 @@ class Game:
         win_fx_path = level["win_fx_path"]
 
         self.music = pygame.mixer.Sound(bgm_path)
-        self.music.set_volume(0.2)
+        self.music.set_volume(0.15)
         self.music.play(loops=-1)
         self.laser_sound = pygame.mixer.Sound(laser_fx_path)
         self.laser_sound.set_volume(0.1)
         self.explosion_sound = pygame.mixer.Sound(explosion_fx_path)
         self.explosion_sound.set_volume(0.1)
         self.win_fx = pygame.mixer.Sound(win_fx_path)
-        self.win_fx.set_volume(0.2)
+        self.win_fx.set_volume(0.15)
                 
     def run(self):
         # Updates
         self.player.update()
         self.extra.update()
         self.alien_lasers.update()
-
         self.aliens.update(self.alien_direction)
         self.alien_position_checker() #Work on this to change the game speed
         self.extra_alien_timer()
