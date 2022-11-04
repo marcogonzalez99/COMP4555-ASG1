@@ -322,7 +322,7 @@ class GameState():
         if self.state == "main":
             # Get specific level data
             bg_path = game.level_settings.get_value(game.level_num, "bg_path")
-            self.bg = pygame.image.load(bg_path)
+            self.bg = pygame.image.load(bg_path).convert_alpha()
             self.bg = pygame.transform.scale(
                 self.bg, (screen_width, screen_height))
 
@@ -415,7 +415,7 @@ if __name__ == '__main__':
     pygame.display.set_caption("Space Invaders")
 
     # Images
-    game_logo = pygame.image.load('Images/misc/game_logo.png')
+    game_logo = pygame.image.load('Images/misc/game_logo.png').convert_alpha()
     game_logo_rect = game_logo.get_rect(
         center=(screen_width/2, screen_height/2 - 100))
 
