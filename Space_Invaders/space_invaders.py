@@ -177,6 +177,7 @@ class Game:
 
     def victory_sound(self):
         # stop music and play victory sound
+        self.score += 5000
         self.music.stop()
         self.win_fx.play()
 
