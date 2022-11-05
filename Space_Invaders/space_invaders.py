@@ -116,7 +116,7 @@ class Game:
                 self.alien_direction = -1.0 * self.alien_speed
                 self.alien_move_down(self.alien_speed)
             elif alien.rect.left <= 0:
-                self.alien_direction = self.alien_speed 
+                self.alien_direction = self.alien_speed
                 self.alien_move_down(self.alien_speed)
 
     def alien_move_down(self, distance):
@@ -147,8 +147,7 @@ class Game:
             elif extra.speed < 0 and extra.rect.x <= -50:
                 extra.kill()
                 self.bonus_alert.fadeout(0.5)
-
-
+    
     def collision_checks(self):
         # Player lasers
         if self.player.sprite.lasers:
@@ -220,6 +219,7 @@ class Game:
         if self.level_num == 5:
             # end game
             game_state.set_state("game_over")
+            self.alien_setup(rows=0, cols=0)
         else:
             self.level_num += 1
             game_state.set_state("main")
@@ -253,15 +253,8 @@ class Game:
 
             elif self.win_timer < 100:
                 victory_surface = self.font.render('You Won', False, 'white')
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-=======
-=======
->>>>>>> Stashed changes
                 victory_surface_2 = self.font.render(f'Bonus: {self.bonus_points} pts', False, 'white')
                 
->>>>>>> Stashed changes
             elif 100 < self.win_timer < 425 and self.level_num == 5:
                 victory_surface = self.font.render(
                     'Congratulations', False, 'white')
@@ -283,17 +276,9 @@ class Game:
                 self.win_timer = 0
                 self.next_round()
 
-<<<<<<< Updated upstream
-            victory_rect = victory_surface.get_rect(
-                center=(screen_width/2, screen_height/2))
-=======
             victory_rect = victory_surface.get_rect(center=(screen_width/2, screen_height/2))
-            victory_rect_2 = victory_surface_2.get_rect(
-                center=(screen_width/2, (screen_height/2) + 50))
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+            victory_rect_2 = victory_surface_2.get_rect(center=(screen_width/2, (screen_height/2) + 50))
+
             screen.blit(victory_surface, victory_rect)
             screen.blit(victory_surface_2, victory_rect_2)
 
@@ -310,13 +295,6 @@ class Game:
         self.laser_sound = pygame.mixer.Sound(laser_fx_path)
         self.explosion_sound = pygame.mixer.Sound(explosion_fx_path)
         self.win_fx = pygame.mixer.Sound(win_fx_path)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        self.win_fx.set_volume(0.15)
-
-=======
-=======
->>>>>>> Stashed changes
 
         # set volume
         self.music.set_volume(0.15)
@@ -326,8 +304,7 @@ class Game:
 
         # play bgm
         self.music.play(loops=-1)
-                
->>>>>>> Stashed changes
+
     def run(self):
         # Updates
         self.player.update()
