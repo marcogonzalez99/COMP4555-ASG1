@@ -116,7 +116,7 @@ class Game:
                 self.alien_direction = -1.0 * self.alien_speed
                 self.alien_move_down(self.alien_speed)
             elif alien.rect.left <= 0:
-                self.alien_direction = self.alien_speed
+                self.alien_direction = self.alien_speed 
                 self.alien_move_down(self.alien_speed)
 
     def alien_move_down(self, distance):
@@ -219,7 +219,6 @@ class Game:
         if self.level_num == 5:
             # end game
             game_state.set_state("game_over")
-            self.alien_setup(rows=0, cols=0)
         else:
             self.level_num += 1
             game_state.set_state("main")
@@ -304,7 +303,7 @@ class Game:
 
         # play bgm
         self.music.play(loops=-1)
-
+        
     def run(self):
         # Updates
         self.player.update()
