@@ -143,10 +143,10 @@ class Game:
             # check if extra alien is off screen
             if extra.speed > 0 and extra.rect.x >= (screen_width + 50):
                 extra.kill()
-                self.bonus_alert.fadeout(0.5)
+                self.bonus_alert.fadeout(3)
             elif extra.speed < 0 and extra.rect.x <= -50:
                 extra.kill()
-                self.bonus_alert.fadeout(0.5)
+                self.bonus_alert.fadeout(3)
     
     def collision_checks(self):
         # Player lasers
@@ -303,7 +303,7 @@ class Game:
 
         # play bgm
         self.music.play(loops=-1)
-        
+
     def run(self):
         # Updates
         self.player.update()
