@@ -66,7 +66,7 @@
             "player_path" : "Images/player/player_4.png",
             "bgm_path" : "Sounds/bgm/music_level4.wav",
             "laser_fx_path" : "Sounds/laser/audio_laser4.wav",
-            "explosion_fx_path" : "Sounds/explosion/audio_explosion3.wav",
+            "explosion_fx_path" : "Sounds/explosion/audio_explosion4.wav",
             "win_fx_path" : "Sounds/win/audio_win4.wav",
             "bg_path" : "Images/bg/bg_4.png"
         },
