@@ -254,8 +254,11 @@ class Game:
             elif self.win_timer < 100:
                 victory_surface = self.font.render('You Won', False, 'white')
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 =======
+=======
+>>>>>>> Stashed changes
                 victory_surface_2 = self.font.render(f'Bonus: {self.bonus_points} pts', False, 'white')
                 
 >>>>>>> Stashed changes
@@ -287,6 +290,9 @@ class Game:
             victory_rect = victory_surface.get_rect(center=(screen_width/2, screen_height/2))
             victory_rect_2 = victory_surface_2.get_rect(
                 center=(screen_width/2, (screen_height/2) + 50))
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             screen.blit(victory_surface, victory_rect)
             screen.blit(victory_surface_2, victory_rect_2)
@@ -305,9 +311,12 @@ class Game:
         self.explosion_sound = pygame.mixer.Sound(explosion_fx_path)
         self.win_fx = pygame.mixer.Sound(win_fx_path)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         self.win_fx.set_volume(0.15)
 
 =======
+=======
+>>>>>>> Stashed changes
 
         # set volume
         self.music.set_volume(0.15)
