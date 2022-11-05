@@ -2,12 +2,13 @@
     "level_settings": [
         {
             "level" : 1,
-            "rows" : 3,
-            "cols" : 6,
+            "rows" : 5,
+            "cols" : 7,
             "alien_speed" : 1.0,
             "aliens" : ["red"],
             "values" : {
-                "red" : 50
+                "red" : 50,
+                "bonus" : 500
             },
             "player_path" : "Images/player/player_1.png",
             "bgm_path" : "Sounds/bgm/music.wav",
@@ -18,13 +19,14 @@
         },
         {
             "level" : 2,
-            "rows" : 4,
-            "cols" : 6,
+            "rows" : 6,
+            "cols" : 7,
             "alien_speed" : 1.25,
             "aliens" : ["red", "blue"],
             "values" : {
                 "red" : 100,
-                "blue" : 150
+                "blue" : 150,
+                "bonus" : 1000
             },
             "player_path" : "Images/player/player_2.png",
             "bgm_path" : "Sounds/bgm/music_level2.wav",
@@ -35,14 +37,15 @@
         },
         {
             "level" : 3,
-            "rows" : 5,
-            "cols" : 7,
+            "rows" : 7,
+            "cols" : 8,
             "alien_speed" : 1.5,
             "aliens" : ["red", "blue", "green"],
             "values" : {
                 "red" : 150,
                 "blue" : 200,
-                "green" : 300
+                "green" : 300,
+                "bonus" : 2500
             },
             "player_path" : "Images/player/player_3.png",
             "bgm_path" : "Sounds/bgm/music_level3.wav",
@@ -53,15 +56,16 @@
         },
         {
             "level" : 4,
-            "rows" : 6,
-            "cols" : 8,
-            "alien_speed" : 2,
+            "rows" : 7,
+            "cols" : 9,
+            "alien_speed" : 2.0,
             "aliens" : ["red", "blue", "green", "orange"],
             "values" : {
                 "red" : 200,
                 "blue" : 250,
                 "green" : 350,
-                "orange" : 400
+                "orange" : 400,
+                "bonus" : 5000
             },
             "player_path" : "Images/player/player_4.png",
             "bgm_path" : "Sounds/bgm/music_level4.wav",
@@ -72,7 +76,7 @@
         },
         {
             "level" : 5,
-            "rows" : 7,
+            "rows" : 8,
             "cols" : 9,
             "alien_speed" : 2.5,
             "aliens" : ["red", "blue", "green", "orange", "white"],
@@ -81,7 +85,8 @@
                 "blue" : 300,
                 "green" : 400,
                 "orange" : 450,
-                "white" : 500
+                "white" : 500,
+                "bonus" : 10000
             },
             "player_path" : "Images/player/player_5.png",
             "bgm_path" : "Sounds/bgm/music_level5.wav",

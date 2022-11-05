@@ -20,6 +20,7 @@ class Game:
         level = self.level_settings.get_level(1)
         rows = level["rows"]
         cols = level["cols"]
+        self.bonus_points = level["values"]["bonus"]
 
         # Player Setup
         self.player_sprite = Player(
@@ -53,6 +54,21 @@ class Game:
 
         # Sound setup
         self.set_sounds()
+
+        # set static paths
+        damage_fx_path = "Sounds/misc/damage.wav"
+        bonus_hit_path = "Sounds/misc/bonus_hit.wav"
+        bonus_alert_path = "Sounds/misc/bonus_alert.wav"
+
+        # set sounds
+        self.damage_fx = pygame.mixer.Sound(damage_fx_path)
+        self.bonus_hit = pygame.mixer.Sound(bonus_hit_path)
+        self.bonus_alert = pygame.mixer.Sound(bonus_alert_path)
+        
+        # set volume
+        self.damage_fx.set_volume(0.5)
+        self.bonus_hit.set_volume(0.25)
+        self.bonus_alert.set_volume(0.25)
 
         # Extra - Bonus Alien
         self.extra = pygame.sprite.GroupSingle()
@@ -94,14 +110,13 @@ class Game:
                 self.aliens.add(alien_sprite)
 
     def alien_position_checker(self):
-        all_aliens = self.aliens.sprites()
-        for alien in all_aliens:
+        for alien in self.aliens.sprites():
             # We are adding state management here as well to change speed
             if alien.rect.right >= screen_width:
                 self.alien_direction = -1.0 * self.alien_speed
                 self.alien_move_down(self.alien_speed)
             elif alien.rect.left <= 0:
-                self.alien_direction = self.alien_speed
+                self.alien_direction = self.alien_speed 
                 self.alien_move_down(self.alien_speed)
 
     def alien_move_down(self, distance):
@@ -119,8 +134,20 @@ class Game:
     def extra_alien_timer(self):
         self.extra_spawn_time -= 1
         if self.extra_spawn_time <= 0:
+            self.bonus_alert.play(-1)
             self.extra.add(Extra(choice(['right', 'left']), screen_width))
             self.extra_spawn_time = randint(400, 800)
+
+    def extra_alien_check(self):
+        for extra in self.extra.sprites():
+            # check if extra alien is off screen
+            if extra.speed > 0 and extra.rect.x >= (screen_width + 50):
+                extra.kill()
+                self.bonus_alert.fadeout(0.5)
+            elif extra.speed < 0 and extra.rect.x <= -50:
+                extra.kill()
+                self.bonus_alert.fadeout(0.5)
+
 
     def collision_checks(self):
         # Player lasers
@@ -141,6 +168,9 @@ class Game:
                 if pygame.sprite.spritecollide(laser, self.extra, True):
                     self.score += 1000
                     laser.kill()
+                    self.extra.empty()
+                    self.bonus_alert.stop()
+                    self.bonus_hit.play()
 
         # Alien Lasers
         if self.alien_lasers:
@@ -151,6 +181,7 @@ class Game:
                 # Player
                 if pygame.sprite.spritecollide(laser, self.player, False):
                     laser.kill()
+                    self.damage_fx.play()
                     self.lives -= 1
                     if self.lives <= 0:
                         game_state.set_state("game_over")
@@ -182,11 +213,13 @@ class Game:
         self.win_fx.play()
 
     def next_round(self):
+        # Award bonnus points
+        self.score += self.bonus_points
+
         # This function manages the state of the round, allows us to access state and alter it easily
         if self.level_num == 5:
             # end game
             game_state.set_state("game_over")
-            self.alien_setup(rows=0, cols=0)
         else:
             self.level_num += 1
             game_state.set_state("main")
@@ -195,6 +228,7 @@ class Game:
         level = self.level_settings.get_level(self.level_num)
         rows = level["rows"]
         cols = level["cols"]
+        self.bonus_points = level["values"]["bonus"]
 
         # Update player sprite
         self.player.remove(self.player_sprite)
@@ -212,13 +246,19 @@ class Game:
         if not self.aliens.sprites():
             self.win_timer += 1
             victory_surface = self.font.render('', False, 'white')
+            victory_surface_2 = self.font.render('', False, 'white')
 
             if self.win_timer == 1:
                 self.victory_sound()
 
             elif self.win_timer < 100:
                 victory_surface = self.font.render('You Won', False, 'white')
+<<<<<<< Updated upstream
 
+=======
+                victory_surface_2 = self.font.render(f'Bonus: {self.bonus_points} pts', False, 'white')
+                
+>>>>>>> Stashed changes
             elif 100 < self.win_timer < 425 and self.level_num == 5:
                 victory_surface = self.font.render(
                     'Congratulations', False, 'white')
@@ -240,9 +280,16 @@ class Game:
                 self.win_timer = 0
                 self.next_round()
 
+<<<<<<< Updated upstream
             victory_rect = victory_surface.get_rect(
                 center=(screen_width/2, screen_height/2))
+=======
+            victory_rect = victory_surface.get_rect(center=(screen_width/2, screen_height/2))
+            victory_rect_2 = victory_surface_2.get_rect(
+                center=(screen_width/2, (screen_height/2) + 50))
+>>>>>>> Stashed changes
             screen.blit(victory_surface, victory_rect)
+            screen.blit(victory_surface_2, victory_rect_2)
 
     def set_sounds(self):
         # Get level attributes
@@ -252,16 +299,26 @@ class Game:
         laser_fx_path = level["laser_fx_path"]
         win_fx_path = level["win_fx_path"]
 
+        # set sounds
         self.music = pygame.mixer.Sound(bgm_path)
-        self.music.set_volume(0.15)
-        self.music.play(loops=-1)
         self.laser_sound = pygame.mixer.Sound(laser_fx_path)
-        self.laser_sound.set_volume(0.1)
         self.explosion_sound = pygame.mixer.Sound(explosion_fx_path)
-        self.explosion_sound.set_volume(0.1)
         self.win_fx = pygame.mixer.Sound(win_fx_path)
+<<<<<<< Updated upstream
         self.win_fx.set_volume(0.15)
 
+=======
+
+        # set volume
+        self.music.set_volume(0.15)
+        self.laser_sound.set_volume(0.1)
+        self.explosion_sound.set_volume(0.1)
+        self.win_fx.set_volume(0.25)
+
+        # play bgm
+        self.music.play(loops=-1)
+                
+>>>>>>> Stashed changes
     def run(self):
         # Updates
         self.player.update()
@@ -270,6 +327,7 @@ class Game:
         self.aliens.update(self.alien_direction)
         self.alien_position_checker()  # Work on this to change the game speed
         self.extra_alien_timer()
+        self.extra_alien_check()
         self.collision_checks()
 
         # Drawings
@@ -428,4 +486,4 @@ if __name__ == '__main__':
 
     while True:
         game_state.state_manager()
-        clock.tick(75)
+        clock.tick(60)

@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
 
         # Set laser sound
         self.laser_sound = pygame.mixer.Sound(laser_fx_path)
-        self.laser_sound.set_volume(0.1)
+        self.laser_sound.set_volume(0.15)
 
     def get_input(self):
         keys = pygame.key.get_pressed()
