@@ -68,7 +68,7 @@ class Game:
         # set volume
         self.damage_fx.set_volume(0.5)
         self.bonus_hit.set_volume(0.25)
-        self.bonus_alert.set_volume(0.25)
+        self.bonus_alert.set_volume(0.15)
 
         # Extra - Bonus Alien
         self.extra = pygame.sprite.GroupSingle()
