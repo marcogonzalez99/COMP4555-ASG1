@@ -64,7 +64,7 @@ class Game:
         self.damage_fx = pygame.mixer.Sound(damage_fx_path)
         self.bonus_hit = pygame.mixer.Sound(bonus_hit_path)
         self.bonus_alert = pygame.mixer.Sound(bonus_alert_path)
-        
+
         # set volume
         self.damage_fx.set_volume(0.5)
         self.bonus_hit.set_volume(0.25)
@@ -116,7 +116,7 @@ class Game:
                 self.alien_direction = -1.0 * self.alien_speed
                 self.alien_move_down(self.alien_speed)
             elif alien.rect.left <= 0:
-                self.alien_direction = self.alien_speed 
+                self.alien_direction = self.alien_speed
                 self.alien_move_down(self.alien_speed)
 
     def alien_move_down(self, distance):
@@ -147,7 +147,7 @@ class Game:
             elif extra.speed < 0 and extra.rect.x <= -50:
                 extra.kill()
                 self.bonus_alert.fadeout(3)
-    
+
     def collision_checks(self):
         # Player lasers
         if self.player.sprite.lasers:
@@ -207,7 +207,6 @@ class Game:
 
     def victory_sound(self):
         # stop music and play victory sound
-        self.score += 5000
         self.music.stop()
         self.win_fx.play()
 
@@ -252,8 +251,9 @@ class Game:
 
             elif self.win_timer < 100:
                 victory_surface = self.font.render('You Won', False, 'white')
-                victory_surface_2 = self.font.render(f'Bonus: {self.bonus_points} pts', False, 'white')
-                
+                victory_surface_2 = self.font.render(
+                    f'Bonus: {self.bonus_points} pts', False, 'white')
+
             elif 100 < self.win_timer < 425 and self.level_num == 5:
                 victory_surface = self.font.render(
                     'Congratulations', False, 'white')
@@ -275,8 +275,10 @@ class Game:
                 self.win_timer = 0
                 self.next_round()
 
-            victory_rect = victory_surface.get_rect(center=(screen_width/2, screen_height/2))
-            victory_rect_2 = victory_surface_2.get_rect(center=(screen_width/2, (screen_height/2) + 50))
+            victory_rect = victory_surface.get_rect(
+                center=(screen_width/2, screen_height/2))
+            victory_rect_2 = victory_surface_2.get_rect(
+                center=(screen_width/2, (screen_height/2) + 50))
 
             screen.blit(victory_surface, victory_rect)
             screen.blit(victory_surface_2, victory_rect_2)
