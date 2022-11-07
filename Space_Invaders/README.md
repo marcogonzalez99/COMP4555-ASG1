@@ -1,4 +1,4 @@
-# COMP4555-ASG1 - Team Head in the Clouds
+# COMP4555-ASG2 - Team Head in the Clouds
 
 # Section 001/401
 
