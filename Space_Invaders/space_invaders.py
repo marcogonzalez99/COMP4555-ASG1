@@ -419,11 +419,6 @@ class GameState():
                 sys.exit()
             if event.type == ALIENLASER:
                 game.alien_shoot()
-            # force advance level
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    game.aliens.sprites().clear()
-                    game.aliens.empty()
 
         screen.fill((30, 30, 30))
         screen.blit(self.bg, (0, 0))
